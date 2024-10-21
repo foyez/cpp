@@ -2,6 +2,8 @@
 
 ## Setup VS Code for c and c++ <sup>[ref](https://takeuforward.org/set-up/how-to-set-up-visual-studio-code-for-c-cp-and-dsa/)</sup>
 
+[How to Write And Run C and C++ Code in Visual Studio Code](https://www.freecodecamp.org/news/how-to-write-and-run-c-cpp-code-on-visual-studio-code/)
+
 1. Install `C/C++ Extension Pack`
 2. Configure to Run Code: `Terminal > Configure Tasks > Create tasks.json file from template > Others`
 3. Paste the code in tasks.json
@@ -79,3 +81,8 @@ echo | g++ -v -x c++ -E -
 ```
 
 5. Run code: `Cmd + Shift + b`
+
+## Compile and run C/C++ in terminal
+
+- For C: `gcc hello.c -o hello.out && ./hello.out`
+- For C++: `g++ hello.c -o hello.out && ./hello.out`
