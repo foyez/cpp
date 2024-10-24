@@ -86,3 +86,13 @@ echo | g++ -v -x c++ -E -
 
 - For C: `gcc hello.c -o hello.out && ./hello.out`
 - For C++: `g++ hello.c -o hello.out && ./hello.out`
+
+## Data Types
+
+- bool - 1 byte or 8 bits
+- int - 4 byte or 32 bits (4 billion possible values, e.g. 4x10^9, -2x10^9 to 2x10^9)
+- long - 8 bytes or 64 bits
+- float - 4 bytes or 32 bits
+- double - 8 bytes or 64 bits
+- char - 1 byte or 8 bits
+- string - ? bytes
