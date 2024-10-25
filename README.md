@@ -96,3 +96,29 @@ echo | g++ -v -x c++ -E -
 - double - 8 bytes or 64 bits
 - char - 1 byte or 8 bits
 - string - ? bytes
+
+## Time & Space Complexity
+
+**Worst Case (O - Big O):**
+
+- O(n^2)
+- O(n log n)
+- O(n) - linear search
+- O(log n) - binary search
+- O(1)
+
+**Best Case (Ω - Omega):**
+
+- Ω(n^2)
+- Ω(n log n)
+- Ω(n)
+- Ω(log n)
+- Ω(1) - linear search, binary search
+
+**Worst and Best Case are Same (Θ - Greek Theta):**
+
+- Θ(n^2)
+- Θ(n log n)
+- Θ(n)
+- Θ(log n)
+- Θ(1)

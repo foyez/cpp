@@ -22,6 +22,7 @@ int main(void)
   // scores[0] = 72;
   // scores[1] = 73;
   // scores[2] = 33;
+  // int scores[N] = {72, 73, 33};
 
   for (int i = 0; i < N; i++)
   {
