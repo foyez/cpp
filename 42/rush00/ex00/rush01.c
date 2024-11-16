@@ -1,28 +1,5 @@
 void ft_putchar(char c);
-
-void ft_print_row(int x, char left, char middle, char right)
-{
-  int col;
-
-  col = 1;
-  while (col <= x)
-  {
-    if (col == 1)
-    {
-      ft_putchar(left);
-    }
-    else if (col == x)
-    {
-      ft_putchar(right);
-    }
-    else
-    {
-      ft_putchar(middle);
-    }
-    col++;
-  }
-  ft_putchar('\n');
-}
+void ft_print_row(int x, char left, char middle, char right);
 
 void rush(int x, int y)
 {
@@ -58,4 +35,28 @@ void rush(int x, int y)
     }
     row++;
   }
+}
+
+void ft_print_row(int x, char left, char middle, char right)
+{
+  int col;
+
+  col = 1;
+  while (col <= x)
+  {
+    if (col == 1)
+    {
+      ft_putchar(left);
+    }
+    else if (col == x)
+    {
+      ft_putchar(right);
+    }
+    else
+    {
+      ft_putchar(middle);
+    }
+    col++;
+  }
+  ft_putchar('\n');
 }
