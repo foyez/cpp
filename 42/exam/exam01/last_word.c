@@ -17,13 +17,9 @@ int ft_strlen(char *str)
   return (i);
 }
 
-int is_tab_or_space(char c)
+int is_whitespace(char c)
 {
-  if (c == '\t' || c == 32)
-  {
-    return (1);
-  }
-  return (0);
+  return (c == '\t' || c == 32);
 }
 
 void last_word(char *str)
@@ -34,14 +30,14 @@ void last_word(char *str)
   n = ft_strlen(str);
   i = n - 1;
   // skip tabs and spaces
-  while (is_tab_or_space(str[i]) == 1)
+  while (is_whitespace(str[i]))
   {
     i--;
   }
 
   while (i > 0)
   {
-    if (is_tab_or_space(str[i]) == 1)
+    if (is_whitespace(str[i]))
     {
       i++;
       break;
@@ -49,7 +45,7 @@ void last_word(char *str)
     i--;
   }
 
-  while (str[i] != '\0' && is_tab_or_space(str[i]) == 0)
+  while (str[i] != '\0' && !is_whitespace(str[i]))
   {
     ft_putchar(str[i]);
     i++;

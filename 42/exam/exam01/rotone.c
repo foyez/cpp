@@ -5,7 +5,7 @@ void ft_putchar(char c)
   write(1, &c, 1);
 }
 
-void rot_13(char *str)
+void rotone(char *str)
 {
   int i;
 
@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 {
   if (argc == 2)
   {
-    rot_13(argv[1]);
+    rotone(argv[1]);
   }
   ft_putchar('\n');
   return (0);

@@ -29,7 +29,7 @@ void inter(char *s1, char *s2)
   i = 0;
   while (s1[i] != '\0')
   {
-    if (is_present(s1, s1[i], i) == 1)
+    if (is_present(s1, s1[i], i))
     {
       i++;
       continue;
