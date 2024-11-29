@@ -78,7 +78,13 @@ char	**ft_split(char *str, char *charset)
 			str++;
 		if (*str && !ft_includes(charset, *str))
 		{
-			arr[i++] = ft_malloc_word(str, charset);
+			arr[i] = ft_malloc_word(str, charset);
+			if (!arr[i])
+			{
+				free(arr);
+				return (NULL);
+			}
+			i++;
 			while (*str && !ft_includes(charset, *str))
 				str++;
 		}
