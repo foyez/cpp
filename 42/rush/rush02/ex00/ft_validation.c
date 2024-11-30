@@ -1,5 +1,6 @@
 void	ft_puterr(void);
 int		validate_number(int argc, char **argv);
+int		ft_atoi(const char *str);
 
 int	is_valid_arguments(int argc)
 {
@@ -12,7 +13,6 @@ int	is_valid_arguments(int argc)
 
 int	validate_number(int argc, char **argv)
 {
-	int		i;
 	int		res;
 	char	*nbr;
 
@@ -22,14 +22,8 @@ int	validate_number(int argc, char **argv)
 		nbr = argv[2];
 	else
 		nbr = "-1";
-	i = 0;
-	res = 0;
-	while (nbr[i] != '\0')
-	{
-		if (!(nbr[i] >= '0' && nbr[i] <= '9'))
-			return (ft_puterr(), -1);
-		res = res * 10 + nbr[i] - '0';
-		i++;
-	}
+	res = ft_atoi(nbr);
+	if (res < 0)
+		return (ft_puterr(), -1);
 	return (res);
 }
