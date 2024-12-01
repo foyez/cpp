@@ -5,7 +5,7 @@ CC = cc
 
 SRC = src
 INCLUDE = include
-OBJ = $(SRC:.c=.o)
+OBJ = obj
 
 # list all files matching pattern recursively
 rfindfiles = $(shell find $(1) -type f -name '$(2)')
@@ -19,16 +19,12 @@ objects := $(sources:$(SRC)/%.c=$(OBJ)/%.o)
 
 # create object files directory if it doesn't exist
 $(OBJ)/%.o: $(SRC)/%.c $(headers)
-	@mkdir -p $(OBJ)
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@
 
-# Compile binary from all o files
+# compile the program
 $(NAME): $(objects)
 	$(CC) $(CFLAGS) -o $(NAME) $(objects)
-
-# create object files
-$(OBJ)/%.o: $(SRC)/%.c $(INCLUDE)/%.h
-	$(CC) $(CFLAGS) -c $< -o $@
 
 # Clean up object files
 clean:
@@ -38,7 +34,8 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
-# remake everything
+# Rule to remake everything
 re: fclean $(NAME)
 
+# Phony targets
 .PHONY: all clean fclean re
