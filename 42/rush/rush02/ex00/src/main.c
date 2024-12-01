@@ -1,8 +1,8 @@
+#include "ft.h"
 #include <stdlib.h>
 
-#define DEFAULT_DICT "dict/numbers.en.dict"
+#define DEFAULT_DICT "dict/numbers.dict"
 
-void	ft_error(char *str);
 int		validate_args(int argc, char **argv, char *default_dict);
 
 int	error(void)
@@ -19,8 +19,11 @@ int	dict_error(void)
 
 void	print_num_words(char *file_path, char *nbr)
 {
-	(void)file_path;
-	(void)nbr;
+	// (void)file_path;
+	// (void)nbr;
+	ft_putstr(file_path);
+	ft_putchar('\n');
+	ft_putstr(nbr);
 }
 
 int	main(int argc, char **argv)
