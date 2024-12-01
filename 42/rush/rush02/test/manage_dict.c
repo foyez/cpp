@@ -4,7 +4,31 @@
 #include <string.h>
 #include <unistd.h>
 
-// Updated get_number_word function
+const char	*default_dict = "numbers.dict";
+
+void	num_to_words(int nbr)
+{
+	if (nbr == 0)
+	{
+		printf("zero");
+		return ;
+	}
+	if (nbr >= 1000)
+	{
+		num_to_words(nbr / 1000);
+		printf(" thousand ");
+		nbr %= 1000;
+	}
+	if (nbr >= 20)
+	{
+		printf("");
+	}
+	if (nbr > 0)
+	{
+		printf("five");
+	}
+}
+
 int	get_number_word(int number, const char *filePath, char *output,
 		size_t outputSize)
 {
@@ -54,11 +78,10 @@ int	get_number_word(int number, const char *filePath, char *output,
 	return (-1); // Not found
 }
 
-void	print_number_words(int number)
+void	print_number_words(int number, const char *file_path)
 {
-	const char	*file_path = "dict/en.dict";
-	char		tensWord[100] = {0};
-	char		unitsWord[100] = {0};
+	char	tensWord[100] = {0};
+	char	unitsWord[100] = {0};
 
 	if (number < 0 || number > 99)
 	{
