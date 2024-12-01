@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -Werror
 CC = cc
 
 SRC = src
-INCLUDE = include
+INCLUDE = includes
 OBJ = obj
 
 # list all files matching pattern recursively
