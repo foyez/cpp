@@ -17,9 +17,14 @@ headers := $(call rfindfiles,$(INCLUDE),*.h)
 # Convert c files to o files
 objects := $(sources:$(SRC)/%.c=$(OBJ)/%.o)
 
+# create object files directory if it doesn't exist
+$(OBJ)/%.o: $(SRC)/%.c $(headers)
+	@mkdir -p $(OBJ)
+	$(CC) $(CFLAGS) -I$(INCLUDE) -c $< -o $@
+
 # Compile binary from all o files
 $(NAME): $(objects)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) -o $(NAME) $(objects)
 
 # create object files
 $(OBJ)/%.o: $(SRC)/%.c $(INCLUDE)/%.h
@@ -27,7 +32,7 @@ $(OBJ)/%.o: $(SRC)/%.c $(INCLUDE)/%.h
 
 # Clean up object files
 clean:
-	rm -f $(OBJ)
+	rm -rf $(OBJ)
 
 # Clean up everything (object files and binary)
 fclean: clean

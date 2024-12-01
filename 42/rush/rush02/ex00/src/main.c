@@ -33,8 +33,8 @@ int	main(int argc, char **argv)
 	if (err_code == -1)
 		return (dict_error());
 	if (argc == 2)
-		init(DEFAULT_DICT, argv[1]);
+		print_num_words(DEFAULT_DICT, argv[1]);
 	else if (argc == 3)
-		init(argv[1], argv[2]);
+		print_num_words(argv[1], argv[2]);
 	return (EXIT_SUCCESS);
 }

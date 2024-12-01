@@ -4,8 +4,6 @@ int		ft_atoi(const char *str);
 
 int	is_valid_arguments(int argc)
 {
-	int	nbr;
-
 	if (!(argc == 2 || argc == 3))
 		return (ft_puterr(), 0);
 	return (1);
