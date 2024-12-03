@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-int	ft_includes(char *str, char to_find)
+int	ft_is_separator(char *str, char to_find)
 {
 	int	i;
 
@@ -21,12 +21,12 @@ int	ft_count_words(char *str, char *charset)
 	count = 0;
 	while (*str)
 	{
-		while (*str && ft_includes(charset, *str))
+		while (*str && ft_is_separator(charset, *str))
 			str++;
-		if (*str && !ft_includes(charset, *str))
+		if (*str && !ft_is_separator(charset, *str))
 		{
 			count++;
-			while (*str && !ft_includes(charset, *str))
+			while (*str && !ft_is_separator(charset, *str))
 				str++;
 		}
 	}
@@ -38,7 +38,7 @@ int	ft_wordlen(char *str, char *charset)
 	int	i;
 
 	i = 0;
-	while (str[i] && !ft_includes(charset, str[i]))
+	while (str[i] && !ft_is_separator(charset, str[i]))
 		i++;
 	return (i);
 }
@@ -74,9 +74,9 @@ char	**ft_split(char *str, char *charset)
 		return (NULL);
 	while (*str)
 	{
-		while (*str && ft_includes(charset, *str))
+		while (*str && ft_is_separator(charset, *str))
 			str++;
-		if (*str && !ft_includes(charset, *str))
+		if (*str && !ft_is_separator(charset, *str))
 		{
 			arr[i] = ft_malloc_word(str, charset);
 			if (!arr[i])
@@ -85,7 +85,7 @@ char	**ft_split(char *str, char *charset)
 				return (NULL);
 			}
 			i++;
-			while (*str && !ft_includes(charset, *str))
+			while (*str && !ft_is_separator(charset, *str))
 				str++;
 		}
 	}
