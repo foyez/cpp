@@ -33,3 +33,6 @@
 
 # Specific example for ignoring executables without extensions
 *.out
+
+# debug
+*.dSYM

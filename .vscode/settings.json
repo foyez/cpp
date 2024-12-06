@@ -1,6 +1,8 @@
 {
   "files.associations": {
     "vector": "cpp",
-    "utils.h": "c"
+    "utils.h": "c",
+    "__locale": "c",
+    "ios": "c"
   }
 }
