@@ -1,12 +1,28 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-char	*ft_strncpy(char *dest, char *src, int n)
+void	ft_putstr(char *str)
+{
+	while (*str)
+		write(1, str++, 1);
+}
+
+int	ft_strlen(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (src[i] && i < n)
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
+
+char	*ft_strncpy(char *dest, char *src, unsigned int n)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (src[i] != '\0' && i < n)
 	{
 		dest[i] = src[i];
 		i++;
@@ -40,28 +56,12 @@ char	*ft_strstr(char *str, char *to_find)
 	return (0);
 }
 
-void	ft_putstr(char *str)
-{
-	while (*str)
-		write(1, str++, 1);
-}
-
-int	ft_strlen(char *str)
+int	is_common_substr(char *substr, char **strs, int size)
 {
 	int	i;
 
 	i = 0;
-	while (str[i] != '\0')
-		i++;
-	return (i);
-}
-
-int	is_common_substr(char *substr, char **strs, int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
+	while (i < size)
 	{
 		if (!ft_strstr(strs[i], substr))
 			return (0);
@@ -70,20 +70,20 @@ int	is_common_substr(char *substr, char **strs, int count)
 	return (1);
 }
 
-void	str_maxlenoc(int len, char **strs)
+void	ft_maxlenoc(char **strs, int size)
 {
-	char	*firststr;
-	int		firstlen;
 	char	*result;
 	char	*tmp;
-	int		maxlen;
 	int		substrlen;
+	char	*firststr;
+	int		firstlen;
 	int		start;
+	int		maxlen;
 
-	firststr = strs[0];
-	firstlen = ft_strlen(firststr);
 	result = NULL;
 	maxlen = 0;
+	firststr = strs[0];
+	firstlen = ft_strlen(firststr);
 	substrlen = 0;
 	while (++substrlen <= firstlen)
 	{
@@ -95,8 +95,7 @@ void	str_maxlenoc(int len, char **strs)
 				return ;
 			ft_strncpy(tmp, &firststr[start], substrlen);
 			tmp[substrlen] = '\0';
-			// skiping first string
-			if (!is_common_substr(tmp, strs + 1, len - 1))
+			if (!is_common_substr(tmp, strs + 1, size - 1))
 			{
 				free(tmp);
 				continue ;
@@ -124,7 +123,7 @@ void	str_maxlenoc(int len, char **strs)
 int	main(int argc, char **argv)
 {
 	if (argc >= 2)
-		str_maxlenoc(argc - 1, argv + 1);
+		ft_maxlenoc(argv + 1, argc - 1);
 	ft_putstr("\n");
 	return (0);
 }
