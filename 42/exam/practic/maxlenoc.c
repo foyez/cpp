@@ -84,52 +84,41 @@ int	is_common_substring(char *substr, char **strs, int count)
 	return (1);
 }
 
-void	free_res(char *res)
-{
-	if (res)
-		free(res);
-}
-
-void	free_tmp(char *tmp)
-{
-	if (tmp)
-		free(tmp);
-}
-
-void	str_maxlenoc(int argc, char **argv)
+void	str_maxlenoc(int len, char **strs)
 {
 	char	*first_str;
 	int		first_len;
 	char	*result;
 	char	*tmp;
-	int		max_len;
-	int		len;
+	int		maxlen;
+	int		substrlen;
 	int		start;
 
-	first_str = argv[1];
+	first_str = strs[0];
 	first_len = ft_strlen(first_str);
 	result = NULL;
-	max_len = 0;
-	len = 0;
-	while (++len <= first_len)
+	maxlen = 0;
+	substrlen = 0;
+	while (++substrlen <= first_len)
 	{
 		start = -1;
-		while (++start <= first_len - len)
+		while (++start <= first_len - substrlen)
 		{
-			tmp = (char *)malloc(sizeof(char) * (len + 1));
-			ft_strncpy(tmp, &first_str[start], len);
-			tmp[len] = '\0';
-			if (!is_common_substring(tmp, argv + 1, argc - 1))
+			tmp = (char *)malloc(sizeof(char) * (substrlen + 1));
+			ft_strncpy(tmp, &first_str[start], substrlen);
+			tmp[substrlen] = '\0';
+			// skiping first string
+			if (!is_common_substring(tmp, strs + 1, len - 1))
 			{
-				free_tmp(tmp);
+				free(tmp);
 				continue ;
 			}
-			if (len > max_len)
+			if (substrlen > maxlen)
 			{
-				max_len = len;
+				maxlen = substrlen;
 				if (result)
 					free(result);
-				result = (char *)malloc((len + 1) * sizeof(char));
+				result = (char *)malloc((substrlen + 1) * sizeof(char));
 				if (!result)
 					return ;
 				ft_strcpy(result, tmp);
@@ -146,8 +135,10 @@ void	str_maxlenoc(int argc, char **argv)
 
 int	main(int argc, char **argv)
 {
+	// char	*strs[] = {"abcd", "bc"};
+	// str_maxlenoc(2, strs);
 	if (argc >= 2)
-		str_maxlenoc(argc, argv);
+		str_maxlenoc(argc - 1, argv + 1);
 	write(1, "\n", 1);
 	return (0);
 }
