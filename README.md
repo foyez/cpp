@@ -130,6 +130,9 @@ br l
 br del <breakpoint_number>
 # run - launch the executable in the debugger
 run arg1 arg2
+# run in graphical interface
+gui
+# esc - to exit from gui
 # n - stepping over calls
 # s - stepping into calls
 # continue execution until the next breakpoint
