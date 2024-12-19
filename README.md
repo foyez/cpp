@@ -84,8 +84,22 @@ echo | g++ -v -x c++ -E -
 
 ## Compile and run C/C++ in terminal
 
-- For C: `gcc hello.c -o hello.out && ./hello.out`
-- For C++: `g++ hello.c -o hello.out && ./hello.out`
+```sh
+# For C:
+# gcc: Invokes the GNU Compiler
+# -Wall: Enables most of the common compiler warnings
+# -Wextra: Activates additional warning flags
+# -Werror: Treats all warnings as errors
+# -fsanitize=address: Enables AddressSanitizer, a tool for detecting memory issues like buffer overflows, use-after-free, etc.
+# -g: Includes debugging information
+# hello.c: The input source code file to be compiled
+# -o hello.out: Specifies the name of the output executable file
+# &&: Ensures that the executable is run only if the compilation is successful
+gcc -Wall -Wextra -Werror -fsanitize=address -g hello.c -o hello.out && ./hello.out
+
+# For C++:
+g++ hello.c -o hello.out && ./hello.out
+```
 
 ## Data Types
 
