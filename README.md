@@ -101,6 +101,43 @@ gcc -Wall -Wextra -Werror -fsanitize=address -g hello.c -o hello.out && ./hello.
 g++ hello.c -o hello.out && ./hello.out
 ```
 
+## LLDB Debugger <sup>[ref](https://www.youtube.com/watch?v=v_C1cvo1biI)</sup>
+
+- Official site: <https://lldb.llvm.org/use/map.html>
+
+```sh
+# to compile with -g flag
+cc -g hello.c
+
+# to run
+lldb ./a.out
+
+# to create a debugging target
+target create ./a.out
+
+# lldb commands
+# help
+# b - set a breakpoint
+# set a breakpoint in the current file
+b 7
+# set a breakpoint at a specific line
+b hello.c:7
+# set a breakpoint by function name
+b main
+# to view all breakpoints
+br l
+# deleting breakpoints
+br del <breakpoint_number>
+# run - launch the executable in the debugger
+run arg1 arg2
+# n - stepping over calls
+# s - stepping into calls
+# continue execution until the next breakpoint
+continue
+# quit
+q
+```
+
 ## Data Types
 
 - bool - 1 byte or 8 bits
