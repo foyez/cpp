@@ -4,11 +4,11 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 SRC = main.c
-OBJ = $(SRC:.c=.o)
+OBJ = $(SRC:%.c=%.o)
 
 all: $(NAME)
 
-.o: .c
+%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ)

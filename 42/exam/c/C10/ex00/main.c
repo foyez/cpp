@@ -16,7 +16,7 @@ void	ft_error(char *str)
 	write(STDERR_FILENO, str, ft_strlen(str));
 }
 
-int	ft_display_file(char *file_path)
+int	ft_display_file(const char *file_path)
 {
 	const int	buffer_size = 1024;
 	int			fd;
