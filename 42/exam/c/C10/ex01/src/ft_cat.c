@@ -42,6 +42,10 @@ int	ft_cat(const char *filepath)
 
 void	ft_read_stdin(void)
 {
+	char	buf;
+
+	while (read(0, &buf, 1))
+		write(STDOUT_FILENO, &buf, 1);
 }
 
 int	main(int argc, char **argv)
@@ -49,7 +53,12 @@ int	main(int argc, char **argv)
 	int	i;
 
 	if (argc < 2)
-		ft_read_stdin();
+	{
+		if (errno == 0)
+			ft_read_stdin();
+		else
+			print_error(argv[0]);
+	}
 	else
 	{
 		i = 0;
