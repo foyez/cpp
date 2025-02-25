@@ -13,7 +13,7 @@ NORM_FLAGS = -R CheckForbiddenSourceHeader -R CheckDefine
 rfiles = $(shell find $(1) -type f -name '$(2)')
 
 sources = $(call rfiles,$(SRC),*.c)
-# headers = $(call rfiles,$(INCLUDE),*.h)
+headers = $(call rfiles,$(INCLUDE),*.h)
 objects = $(sources:$(SRC)/%.c=$(OBJ)/%.o)
 
 all: $(NAME)

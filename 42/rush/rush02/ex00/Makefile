@@ -44,3 +44,5 @@ re: fclean $(NAME)
 
 # Phony targets
 .PHONY: all clean fclean re
+
+# https://github.com/yuann3/42-Rush02/blob/main/Makefile
