@@ -36,3 +36,6 @@
 
 # debug
 *.dSYM
+
+# mac
+.DS_Store
