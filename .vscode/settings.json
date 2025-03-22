@@ -3,6 +3,7 @@
     "vector": "cpp",
     "utils.h": "c",
     "__locale": "c",
-    "ios": "c"
+    "ios": "c",
+    "printf.h": "c"
   }
 }

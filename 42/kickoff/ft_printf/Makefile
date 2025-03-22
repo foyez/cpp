@@ -45,6 +45,9 @@ fclean: clean
 
 re: fclean all
 
+run: $(objects)
+	$(CC) $(CFLAGS) $(objects) -o myprogram.out
+
 norm:
 	@echo "Running norminette on all .c and .h files..."
 	$(NORM) $(NORM_FLAGS) $(sources) $(headers)
