@@ -1,13 +1,10 @@
 NAME = libft.a
 BONUS_NAME = libft_bonus.a
-TEST_BINARY = test_binary
 
 OBJ_DIR = obj
-TEST_DIR = tests
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-CMOCKA_FLAGS = `pkg-config --cflags --libs cmocka`
 
 NORM = norminette
 NORM_FLAGS = -R CheckForbiddenSourceHeader -R CheckDefine
@@ -47,7 +44,7 @@ clean:
 	rm -rf $(OBJ_DIR)
 
 fclean: clean
-	rm -f $(NAME) $(BONUS_NAME) $(TEST_BINARY)
+	rm -f $(NAME) $(BONUS_NAME)
 
 re: fclean all
 
@@ -55,14 +52,4 @@ norm:
 	@echo "Running norminette..."
 	$(NORM) $(NORM_FLAGS) $(SRC_FILES) $(SRC_BONUS_FILES) $(HEADER_FILES)
 
-# Command to compile the test suite
-$(TEST_BINARY): $(TEST_DIR)/testsuite.c $(NAME) bonus
-	$(CC) $(CFLAGS) $(TEST_DIR)/testsuite.c -o $(TEST_BINARY) $(CMOCKA_FLAGS) \
-	-L. -lft
-
-# Target to run tests
-test: $(TEST_BINARY)
-	@echo "Running tests..."
-	./$(TEST_BINARY)
-
-.PHONY: all clean fclean re bonus norm test
+.PHONY: all clean fclean re bonus norm
