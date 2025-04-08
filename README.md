@@ -141,6 +141,23 @@ continue
 q
 ```
 
+## Valgrind <sup>[How to run Valgrind](https://stackoverflow.com/questions/5134891/how-do-i-use-valgrind-to-find-memory-leaks)</sup>
+
+```sh
+valgrind --leak-check=full \
+         --show-leak-kinds=all \
+         --track-origins=yes \
+         --log-file=valgrind-log.txt \
+         -s \
+         ./executable param1
+```
+
+- `--leak-check=full`: Perform a detailed memory leak check.
+- `--show-leak-kinds=all`: Show all kinds of leaks, including definitely lost, indirectly lost, possibly lost, and still reachable.
+- `--track-origins=yes`: Track the origins of uninitialized values.
+- `-s`: Provide a summary of the leak check.
+- `--log-file`: Directs Valgrind's output to a specified file. This is useful for preserving extensive output that exceeds terminal capacity, allowing for easier review and analysis.
+
 ## Data Types
 
 - bool - 1 byte or 8 bits
