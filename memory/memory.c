@@ -11,6 +11,15 @@
 // CHECK MEMORY LEAKS
 // AddressSanitizer: cc -fsanitize=address -g file.c
 
+void	safe_free(char **ptr)
+{
+	if (ptr && *ptr)
+	{
+		free(*ptr);
+		*ptr = NULL;
+	}
+}
+
 char *allocate_memory_buffer(void)
 {
   char *buffer;
@@ -33,8 +42,9 @@ int main(void)
   if (!buffer)
     return (1);
   puts("Memory allocated");
-  free(buffer);
-  buffer = NULL;
+  // free(buffer);
+  // buffer = NULL;
+  safe_free(&buffer);
   free(buffer);
   puts("Memory freed");
   return (0);
