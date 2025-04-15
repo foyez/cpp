@@ -50,7 +50,7 @@
  <a href="#database">Database</a><br>
  <a href="#wordpress-configuration">WordPress Configuration</a><br>
  <a href="#8---signaturetxt">8 - Signature.txt</a><br>
- <a href="#9---duplicate-vm">Duplicate Virtual Machine</a><br>
+ <a href="#9---duplicate-virtual-machine">Duplicate Virtual Machine</a><br>
  <a href="#10---theory">10 - Theory</a><br>
  <a href="#how-to-correct---evaluator-version">How to Correct - Evaluator Version</a><br>
  <a href="#1-preliminary-tests">1. Preliminary Tests</a><br>
