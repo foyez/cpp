@@ -1671,7 +1671,74 @@ Next, navigate to the directory where your virtual machine's `.vdi` file is loca
 </p>
 <br>
 
-## 9 - Theory
+## 9 - Duplicate Virtual Machine
+
+`Please note that your virtual machine’s signature may be altered
+after your first evaluation. To solve this problem, you can
+duplicate your virtual machine or use save state.`
+
+✅ Option 1: Clone the VM (Very slow)
+
+1. Open VirtualBox.
+
+2. Right-click on your VM → Click Clone.
+
+3. Choose:
+
+	- Name: Give your new VM a name.
+
+	- Full Clone (recommended): This makes an independent copy.
+
+	- Keep everything else as default.
+
+4. Click Clone — it’ll take a bit, but you’ll now have a backup VM.
+
+✅ Option 2: Manual Copy (Faster way)
+
+1. Close the VM and VirtualBox completely.
+
+2. Go to the VM folder where you installed (usually cd ~/goinfre).
+
+3. Copy the entire VM folder to another location (`cp -r Born2beroot Born2berootClone`).
+
+4. Navigate to the copied VM folder (`cd Born2berootClone`).
+
+5. Reassign a new UUID to the cloned .vdi disk (virtual hard drive) (`VBoxManage internalcommands sethduuid Born2beroot.vdi`).
+
+6. Get the new UUID of your .vdi file (`VBoxManage showhdinfo Born2beroot.vdi`).
+
+```sh
+UUID:           bdc15788-09c1-42f4-96c7-5e3d7d40b4b3
+Parent UUID:    base
+State:          created
+Type:           normal (base)
+Location:       /goinfre/username/Born2berootClone/Born2beroot.vdi
+Storage format: VDI
+Format variant: dynamic default
+Capacity:       30720 MBytes
+Size on disk:   5390 MBytes
+Encryption:     disabled
+Property:       AllocationBlockSize=1048576
+```
+
+7. Also reassign UUID to the Machine. To generate UUID: `uuidgen`
+
+```sh
+# example
+0420EC8E-1C0D-4139-BA2E-6801F92D28A6
+```
+
+8. Edit the .vbox file: `vi Born2beroot.vbox`
+
+```sh
+<Machine uuid="{0420EC8E-1C0D-4139-BA2E-6801F92D28A6}" name="" ... >
+
+<HardDisk uuid="{bdc15788-09c1-42f4-96c7-5e3d7d40b4b3}" ... >
+```
+
+9. In VirtualBox, go to Machine > Add and select the .vbox file from the copied folder.
+
+## 10 - Theory
 
 <p align="justify">
 
