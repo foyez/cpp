@@ -1697,7 +1697,7 @@ duplicate your virtual machine or use save state.`
 
 1. Close the VM and VirtualBox completely.
 
-2. Go to the VM folder where you installed (usually cd ~/goinfre).
+2. Go to the VM folder where you installed (usually `cd ~/goinfre`).
 
 3. Copy the entire VM folder to another location (`cp -r Born2beroot Born2berootClone`).
 
@@ -1737,6 +1737,18 @@ Property:       AllocationBlockSize=1048576
 ```
 
 9. In VirtualBox, go to Machine > Add and select the .vbox file from the copied folder.
+
+So, all steps you need to follow:
+
+```sh
+cd ~/goinfre
+cp -r Born2beroot Born2berootClone
+cd Born2berootClone
+VBoxManage internalcommands sethduuid Born2beroot.vdi
+VBoxManage showhdinfo Born2beroot.vdi
+uuidgen
+vi Born2beroot.vbox
+```
 
 ## 10 - Theory
 
