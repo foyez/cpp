@@ -456,6 +456,12 @@ Check also the **[GUID Partition Table](https://en.wikipedia.org/wiki/GUID_Parti
 
 	<img width="650" src="https://github.com/f-corvaro/42.common_core/blob/main/01-born2beroot/.extra/60.png">
 
+	To extend the logical volumes:
+
+	```sh
+	sudo lvextend -L 10G /dev/LVMGroup/root
+	```
+
 ### Configure Partitions and Mount Points
 
 1. **View Partitions and Free Space**
@@ -573,10 +579,17 @@ Check also the **[GUID Partition Table](https://en.wikipedia.org/wiki/GUID_Parti
 
 <img width="650" src="https://github.com/f-corvaro/42.common_core/blob/main/01-born2beroot/.extra/79.png">
 
+To check partitions structure:
+
+```bash
+lsblk
+```
+
 ### Installing Sudo and Configuring User and Groups
 
 1. **Switch to Root User and Install Sudo**
    Begin by switching to the root user to install [sudo](https://en.wikipedia.org/wiki/Sudo). Enter `su -` in the bash prompt and provide the root password (for me, it is `Pw.20STNG!81`). Additionally, install [VIM](https://en.wikipedia.org/wiki/Vim_(text_editor)) to configure some files. Run the following commands:
+
    ```bash
 	apt-get update
 	apt-get install vim
@@ -588,7 +601,9 @@ Check also the **[GUID Partition Table](https://en.wikipedia.org/wiki/GUID_Parti
 	dpkg -l | grep sudo
 	```
 
-2. **Add User to Sudo Group**
+	To release the mouse cursor from VirtualBox on macOS, press `ctrl` + `option` + `command`
+
+2. **Add User to Sudo and user42 Groups**
 
 	Add the user to the sudo group with the following command:
 
@@ -618,6 +633,16 @@ Check also the **[GUID Partition Table](https://en.wikipedia.org/wiki/GUID_Parti
 
 	```bash
 	sudo -v
+	```
+
+	Add a group called `user42` and `<username>` user to it.
+
+	```bash
+	sudo groupadd user42
+	sudo usermod -aG user42 <username>
+
+	# Verify whether the user was successfully added to the user42 group
+	getent group user42
 	```
 
 3. **Running Root-Privileged Commands**
@@ -811,6 +836,14 @@ Check also the **[GUID Partition Table](https://en.wikipedia.org/wiki/GUID_Parti
    - `PASS_MAX_DAYS`: Maximum days until password expiration.
    - `PASS_MIN_DAYS`: Minimum days until password change.
    - `PASS_WARN_AGE`: Days until password expiration warning.
+
+   Changes in `/etc/login.defs` only apply to new users created after the change — they do not retroactively apply to existing users.
+
+   To manually set the rules in existing users:
+
+   ```bash
+   sudo chage -M 30 -m 2 -W 7 username
+   ```
 
 3. **Install the `libpam-pwquality` Package**
 
@@ -1276,6 +1309,19 @@ In this example, `*/10 * * * *` means the script will run every 10 minutes.
 </p>
 <br>
 
+To interrupt the script without modifying:
+
+```bash
+# Check if it's in cron
+sudo crontab -l
+
+# Remove or comment the crontab entry
+sudo crontab -e
+
+# Make it non-executable
+sudo chmod -x monitoring.sh
+```
+
 ## 7 - Bonus
 
 ### Wordpress & services configuration
@@ -1422,7 +1468,7 @@ In this example, `*/10 * * * *` means the script will run every 10 minutes.
    Use the following command to create a database:
 
    ```sql
-   CREATE DATABASE wp_database;
+   CREATE DATABASE wp_db;
    ```
 
 	<img width="650" src="https://github.com/f-corvaro/42.common_core/blob/main/01-born2beroot/.extra/114.png">
@@ -1767,7 +1813,13 @@ vi Born2beroot.vbox
 #### 2. General Instructions:
 
  - Verify that the repository contains the `signature.txt` file.
- - Check the signature against the student's `.vdi` file to ensure they match
+ - Check the signature against the student's `.vdi` file to ensure they match.
+
+ ```sh
+ cd ~/goinfre/Born2beroot
+ shasum Born2beroot.vdi
+ ```
+
  - Clone the VM or create a snapshot, then open the VM.
 
 #### 3. Mandatory Part (Questions for the Student):
@@ -1787,7 +1839,7 @@ vi Born2beroot.vbox
  - Connect to the VM as a created user (not root).
  - Ensure the password follows the required policy (2 days min, 7 days warning, 30 days max):
  ```bash
- sudo chage -l username
+ sudo chage -l [username]
  ```
 
  - Check that the UFW service is started:
