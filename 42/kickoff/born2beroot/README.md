@@ -50,7 +50,8 @@
  <a href="#database">Database</a><br>
  <a href="#wordpress-configuration">WordPress Configuration</a><br>
  <a href="#8---signaturetxt">8 - Signature.txt</a><br>
- <a href="#9---theory">9 - Theory</a><br>
+ <a href="#9---duplicate-virtual-machine">9 Duplicate Virtual Machine</a><br>
+ <a href="#10---theory">10 - Theory</a><br>
  <a href="#how-to-correct---evaluator-version">How to Correct - Evaluator Version</a><br>
  <a href="#1-preliminary-tests">1. Preliminary Tests</a><br>
  <a href="#2-general-instructions">2. General Instructions</a><br>
@@ -455,6 +456,12 @@ Check also the **[GUID Partition Table](https://en.wikipedia.org/wiki/GUID_Parti
 
 	<img width="650" src="https://github.com/f-corvaro/42.common_core/blob/main/01-born2beroot/.extra/60.png">
 
+	To extend the logical volumes:
+
+	```sh
+	sudo lvextend -L 10G /dev/LVMGroup/root
+	```
+
 ### Configure Partitions and Mount Points
 
 1. **View Partitions and Free Space**
@@ -572,10 +579,18 @@ Check also the **[GUID Partition Table](https://en.wikipedia.org/wiki/GUID_Parti
 
 <img width="650" src="https://github.com/f-corvaro/42.common_core/blob/main/01-born2beroot/.extra/79.png">
 
+To check partitions structure and os details:
+
+```bash
+lsblk
+cat /etc/os-release
+```
+
 ### Installing Sudo and Configuring User and Groups
 
 1. **Switch to Root User and Install Sudo**
    Begin by switching to the root user to install [sudo](https://en.wikipedia.org/wiki/Sudo). Enter `su -` in the bash prompt and provide the root password (for me, it is `Pw.20STNG!81`). Additionally, install [VIM](https://en.wikipedia.org/wiki/Vim_(text_editor)) to configure some files. Run the following commands:
+
    ```bash
 	apt-get update
 	apt-get install vim
@@ -587,7 +602,9 @@ Check also the **[GUID Partition Table](https://en.wikipedia.org/wiki/GUID_Parti
 	dpkg -l | grep sudo
 	```
 
-2. **Add User to Sudo Group**
+	To release the mouse cursor from VirtualBox on macOS, press `ctrl` + `option` + `command`
+
+2. **Add User to Sudo and user42 Groups**
 
 	Add the user to the sudo group with the following command:
 
@@ -613,10 +630,20 @@ Check also the **[GUID Partition Table](https://en.wikipedia.org/wiki/GUID_Parti
 	sudo reboot
 	```
 
-	After the system reboots, log in and verify sudo powers via:
+	After the system reboots, log in and verify if this user has sudo privileges:
 
 	```bash
-	sudo -v
+	sudo whoami
+	```
+
+	Add a group called `user42` and `<username>` user to it.
+
+	```bash
+	sudo groupadd user42
+	sudo usermod -aG user42 <username>
+
+	# Verify whether the user was successfully added to the user42 group
+	getent group user42
 	```
 
 3. **Running Root-Privileged Commands**
@@ -811,6 +838,21 @@ Check also the **[GUID Partition Table](https://en.wikipedia.org/wiki/GUID_Parti
    - `PASS_MIN_DAYS`: Minimum days until password change.
    - `PASS_WARN_AGE`: Days until password expiration warning.
 
+   Changes in `/etc/login.defs` only apply to new users created after the change — they do not retroactively apply to existing users.
+
+   These changes aren't automatically applied to existing users, to modify existing users:
+   To manually set the rules in existing users:
+
+   ```bash
+   sudo chage -M 30 -m 2 -W 7 [username/root]
+   ```
+
+   To check user settings:
+
+   ```bash
+   chage -l [username/root]
+   ```
+
 3. **Install the `libpam-pwquality` Package**
 
     Install the package and confirm the installation when prompted:
@@ -847,6 +889,16 @@ Check also the **[GUID Partition Table](https://en.wikipedia.org/wiki/GUID_Parti
    - `reject_username`: Password cannot contain the username.
    - `difok=7`: Password must contain at least seven different characters from the previous password.
    - `enforce_for_root`: Apply this password policy to the root user.
+
+   Change user passwords if these are not comply with password policy:
+
+   ```bash
+   # to change current user's password
+   passwd
+
+   # to change another user's password
+   sudo passwd [username]
+   ```
 
 ### Connecting via SSH
 
@@ -1275,6 +1327,19 @@ In this example, `*/10 * * * *` means the script will run every 10 minutes.
 </p>
 <br>
 
+To interrupt the script without modifying:
+
+```bash
+# Check if it's in cron
+sudo crontab -l
+
+# Remove or comment the crontab entry
+sudo crontab -e
+
+# Make it non-executable
+sudo chmod -x monitoring.sh
+```
+
 ## 7 - Bonus
 
 ### Wordpress & services configuration
@@ -1421,7 +1486,7 @@ In this example, `*/10 * * * *` means the script will run every 10 minutes.
    Use the following command to create a database:
 
    ```sql
-   CREATE DATABASE wp_database;
+   CREATE DATABASE wp_db;
    ```
 
 	<img width="650" src="https://github.com/f-corvaro/42.common_core/blob/main/01-born2beroot/.extra/114.png">
@@ -1671,7 +1736,86 @@ Next, navigate to the directory where your virtual machine's `.vdi` file is loca
 </p>
 <br>
 
-## 9 - Theory
+## 9 - Duplicate Virtual Machine
+
+`Please note that your virtual machine’s signature may be altered
+after your first evaluation. To solve this problem, you can
+duplicate your virtual machine or use save state.`
+
+✅ Option 1: Clone the VM (Very slow)
+
+1. Open VirtualBox.
+
+2. Right-click on your VM → Click Clone.
+
+3. Choose:
+
+	- Name: Give your new VM a name.
+
+	- Full Clone (recommended): This makes an independent copy.
+
+	- Keep everything else as default.
+
+4. Click Clone — it’ll take a bit, but you’ll now have a backup VM.
+
+✅ Option 2: Manual Copy (Faster way)
+
+1. Close the VM and VirtualBox completely.
+
+2. Go to the VM folder where you installed (usually `cd ~/goinfre`).
+
+3. Copy the entire VM folder to another location (`cp -r Born2beroot Born2berootClone`).
+
+4. Navigate to the copied VM folder (`cd Born2berootClone`).
+
+5. Reassign a new UUID to the cloned .vdi disk (virtual hard drive) (`VBoxManage internalcommands sethduuid Born2beroot.vdi`).
+
+6. Get the new UUID of your .vdi file (`VBoxManage showhdinfo Born2beroot.vdi`).
+
+```sh
+UUID:           bdc15788-09c1-42f4-96c7-5e3d7d40b4b3
+Parent UUID:    base
+State:          created
+Type:           normal (base)
+Location:       /goinfre/username/Born2berootClone/Born2beroot.vdi
+Storage format: VDI
+Format variant: dynamic default
+Capacity:       30720 MBytes
+Size on disk:   5390 MBytes
+Encryption:     disabled
+Property:       AllocationBlockSize=1048576
+```
+
+7. Also reassign UUID to the Machine. To generate UUID: `uuidgen`
+
+```sh
+# example
+0420EC8E-1C0D-4139-BA2E-6801F92D28A6
+```
+
+8. Edit the .vbox file: `vi Born2beroot.vbox`
+
+```sh
+<Machine uuid="{0420EC8E-1C0D-4139-BA2E-6801F92D28A6}" name="" ... >
+
+<HardDisk uuid="{bdc15788-09c1-42f4-96c7-5e3d7d40b4b3}" ... >
+```
+
+9. In VirtualBox, go to Machine > Add and select the .vbox file from the copied folder.
+
+So, all steps you need to follow:
+
+```sh
+cd ~/goinfre
+cp -r Born2beroot Born2berootClone
+cd Born2berootClone
+VBoxManage internalcommands sethduuid Born2beroot.vdi
+VBoxManage showhdinfo Born2beroot.vdi
+uuidgen
+vi Born2beroot.vbox
+```
+
+## 10 - Theory
 
 <p align="justify">
 
@@ -1687,7 +1831,13 @@ Next, navigate to the directory where your virtual machine's `.vdi` file is loca
 #### 2. General Instructions:
 
  - Verify that the repository contains the `signature.txt` file.
- - Check the signature against the student's `.vdi` file to ensure they match
+ - Check the signature against the student's `.vdi` file to ensure they match.
+
+ ```sh
+ cd ~/goinfre/Born2beroot
+ shasum Born2beroot.vdi
+ ```
+
  - Clone the VM or create a snapshot, then open the VM.
 
 #### 3. Mandatory Part (Questions for the Student):
@@ -1707,7 +1857,7 @@ Next, navigate to the directory where your virtual machine's `.vdi` file is loca
  - Connect to the VM as a created user (not root).
  - Ensure the password follows the required policy (2 days min, 7 days warning, 30 days max):
  ```bash
- sudo chage -l username
+ sudo chage -l [username]
  ```
 
  - Check that the UFW service is started:
@@ -1778,7 +1928,25 @@ Next, navigate to the directory where your virtual machine's `.vdi` file is loca
  getent group evaluating
  ```
 
-7. **Discussion on Password Policy:**
+ 7. **Remove the User from the Group:**
+
+ ```bash
+ sudo deluser [new_username] [new_groupname]
+ ```
+
+ 8. **Delete the User and the Group:**
+
+ ```bash
+ # Delete the user
+ sudo userdel newuser
+ # or with the home directory
+ sudo userdel -r newuser
+
+ # Delete the group
+ sudo groupdel newgroup
+ ```
+
+9. **Discussion on Password Policy:**
 
  - Ask the student to explain the advantages of the password policy beyond its requirement for the project.
  - Discuss the advantages and disadvantages of the policy implementation.
