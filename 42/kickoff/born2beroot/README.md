@@ -579,10 +579,11 @@ Check also the **[GUID Partition Table](https://en.wikipedia.org/wiki/GUID_Parti
 
 <img width="650" src="https://github.com/f-corvaro/42.common_core/blob/main/01-born2beroot/.extra/79.png">
 
-To check partitions structure:
+To check partitions structure and os details:
 
 ```bash
 lsblk
+cat /etc/os-release
 ```
 
 ### Installing Sudo and Configuring User and Groups
@@ -629,10 +630,10 @@ lsblk
 	sudo reboot
 	```
 
-	After the system reboots, log in and verify sudo powers via:
+	After the system reboots, log in and verify if this user has sudo privileges:
 
 	```bash
-	sudo -v
+	sudo whoami
 	```
 
 	Add a group called `user42` and `<username>` user to it.
@@ -839,10 +840,17 @@ lsblk
 
    Changes in `/etc/login.defs` only apply to new users created after the change — they do not retroactively apply to existing users.
 
+   These changes aren't automatically applied to existing users, to modify existing users:
    To manually set the rules in existing users:
 
    ```bash
-   sudo chage -M 30 -m 2 -W 7 username
+   sudo chage -M 30 -m 2 -W 7 [username/root]
+   ```
+
+   To check user settings:
+
+   ```bash
+   chage -l [username/root]
    ```
 
 3. **Install the `libpam-pwquality` Package**
@@ -881,6 +889,16 @@ lsblk
    - `reject_username`: Password cannot contain the username.
    - `difok=7`: Password must contain at least seven different characters from the previous password.
    - `enforce_for_root`: Apply this password policy to the root user.
+
+   Change user passwords if these are not comply with password policy:
+
+   ```bash
+   # to change current user's password
+   passwd
+
+   # to change another user's password
+   sudo passwd [username]
+   ```
 
 ### Connecting via SSH
 
