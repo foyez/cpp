@@ -1928,7 +1928,25 @@ vi Born2beroot.vbox
  getent group evaluating
  ```
 
-7. **Discussion on Password Policy:**
+ 7. **Remove the User from the Group:**
+
+ ```bash
+ sudo deluser [new_username] [new_groupname]
+ ```
+
+ 8. **Delete the User and the Group:**
+
+ ```bash
+ # Delete the user
+ sudo userdel newuser
+ # or with the home directory
+ sudo userdel -r newuser
+
+ # Delete the group
+ sudo groupdel newgroup
+ ```
+
+9. **Discussion on Password Policy:**
 
  - Ask the student to explain the advantages of the password policy beyond its requirement for the project.
  - Discuss the advantages and disadvantages of the policy implementation.
