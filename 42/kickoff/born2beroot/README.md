@@ -922,7 +922,7 @@ cat /etc/os-release
 
 	<img width="650" src="https://github.com/f-corvaro/42.common_core/blob/main/01-born2beroot/.extra/94.png">
 	
-5. **Connect via SSH**
+5. **Connect via SSH using Password**
 
 	To connect via SSH from your host machine to the virtual machine, use the following command:
 
@@ -933,6 +933,33 @@ cat /etc/os-release
     Replace `<user>` with the username you want to log in with. You will be prompted to enter the password for that user. Once the password is entered, you should see a login prompt in a different color, indicating a successful connection.
 
 	<img width="650" src="https://github.com/f-corvaro/42.common_core/blob/main/01-born2beroot/.extra/95.png">
+
+6. **Connect via SSH with key**
+
+```sh
+# generate key pair in your pc
+ssh-keygen -t rsa -b 4096 -C "kaahmed@localhost"
+
+# copy public key to vm
+ssh-copy-id -i ~/.ssh/id_rsa.pub -p 4242 kaahmed@localhost
+
+# login using private key
+ssh -i ~/.ssh/id_rsa -p 4242 kaahmed@localhost
+```
+
+7. **(Optional but Recommended) Disable Password Authentication**
+
+```sh
+# Edit the SSH config on the VM
+sudo vim /etc/ssh/sshd_config
+
+# Find and change:
+PasswordAuthentication no
+PermitRootLogin no
+
+# restart ssh
+sudo systemctl restart ssh
+```
 
 </p>
 <br>
