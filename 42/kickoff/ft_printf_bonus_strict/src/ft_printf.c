@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:57:53 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/22 20:28:48 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/22 20:36:26 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,20 +129,48 @@ int	ft_putchar(char c)
 	return (write(1, &c, 1));
 }
 
+// int	ft_putnchar(char c, int n)
+// {
+// 	int	i;
+// 	int	ret;
+
+// 	i = 0;
+// 	while (i < n)
+// 	{
+// 		ret = ft_putchar(c);
+// 		if (ret == -1)
+// 			return (-1);
+// 		i++;
+// 	}
+// 	return (n);
+// }
+
 int	ft_putnchar(char c, int n)
 {
-	int	i;
-	int	ret;
+	char	buf[1024];
+	int		ret;
+	int		written;
+	int		i;
+	int		chunk;
 
+	written = 0;
+	if (n <= 0)
+		return (0);
+	// Fill buffer manually
 	i = 0;
-	while (i < n)
+	while (i < 1024)
+		buf[i++] = c;
+	// Write in chunks
+	while (n > 0)
 	{
-		ret = ft_putchar(c);
-		if (ret == -1)
+		chunk = (n > 1024) ? 1024 : n;
+		ret = write(1, buf, chunk);
+		if (ret != chunk)
 			return (-1);
-		i++;
+		written += ret;
+		n -= chunk;
 	}
-	return (n);
+	return (written);
 }
 
 int	ft_putpad(int width, int len, int zero_pad)
