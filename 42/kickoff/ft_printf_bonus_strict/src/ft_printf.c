@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:57:53 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/22 20:36:26 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/23 01:35:45 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,11 +149,11 @@ int	ft_putnchar(char c, int n)
 {
 	char	buf[1024];
 	int		ret;
-	int		written;
+	int		count;
 	int		i;
 	int		chunk;
 
-	written = 0;
+	count = 0;
 	if (n <= 0)
 		return (0);
 	// Fill buffer manually
@@ -161,16 +161,18 @@ int	ft_putnchar(char c, int n)
 	while (i < 1024)
 		buf[i++] = c;
 	// Write in chunks
+	chunk = 1024;
 	while (n > 0)
 	{
-		chunk = (n > 1024) ? 1024 : n;
+		if (n < 1024)
+			chunk = n;
 		ret = write(1, buf, chunk);
 		if (ret != chunk)
 			return (-1);
-		written += ret;
+		count += ret;
 		n -= chunk;
 	}
-	return (written);
+	return (count);
 }
 
 int	ft_putpad(int width, int len, int zero_pad)
@@ -393,6 +395,20 @@ int	ft_putprefix(int low)
 	return (2);
 }
 
+int	ft_putbuf(char *buf, int len)
+{
+	int count = 0;
+	while (--len >= 0)
+	{
+		if (ft_putchar(buf[len]) == -1)
+			return (-1);
+		count++;
+	}
+	return (count);
+}
+
+// Effect: -, 0, ., and #
+// No Effect: + and space
 int	ft_print_hex(unsigned int num, t_flags flags, int low)
 {
 	int		count;
@@ -401,7 +417,7 @@ int	ft_print_hex(unsigned int num, t_flags flags, int low)
 	int		hexlen;
 	int		prefixlen;
 	int		zeros;
-	int		i;
+	int		contentlen;
 
 	count = 0;
 	ret = 0;
@@ -414,42 +430,78 @@ int	ft_print_hex(unsigned int num, t_flags flags, int low)
 		prefixlen = 2;
 	if (flags.precision_set && flags.precision > hexlen)
 		zeros = flags.precision - hexlen;
-	if (!flags.left_align)
-	{
-		ret = ft_putpad(flags.width, prefixlen + zeros + hexlen,
-				flags.zero_pad);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
-	if (prefixlen > 0)
+	contentlen = prefixlen + zeros + hexlen;
+	if (prefixlen > 0 && (flags.zero_pad || flags.left_align))
 	{
 		ret = ft_putprefix(low);
 		if (ret == -1)
 			return (-1);
 		count += ret;
 	}
-	if (zeros > 0)
-	{
-		ret = ft_putnchar('0', zeros);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
-	i = hexlen;
-	while (--i >= 0)
-	{
-		if (ft_putchar(hex_buf[i]) == -1)
-			return (-1);
-		count++;
-	}
 	if (flags.left_align)
 	{
-		ret = ft_putpad(flags.width, prefixlen + zeros + hexlen, 0);
+		if (zeros > 0)
+		{
+			ret = ft_putnchar('0', zeros);
+			if (ret == -1)
+				return (-1);
+			count += ret;
+		}
+		ret = ft_putbuf(hex_buf, hexlen);
 		if (ret == -1)
 			return (-1);
 		count += ret;
 	}
+	ret = ft_putpad(flags.width, contentlen, flags.zero_pad);
+	if (ret == -1)
+		return (-1);
+	count += ret;
+	// if (!flags.left_align)
+	// {
+	// 	ret = ft_putpad(flags.width, contentlen, flags.zero_pad);
+	// 	if (ret == -1)
+	// 		return (-1);
+	// 	count += ret;
+	// }
+	if (prefixlen > 0 && !flags.zero_pad && !flags.left_align)
+	{
+		ret = ft_putprefix(low);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	// if (zeros > 0)
+	// {
+	// 	ret = ft_putnchar('0', zeros);
+	// 	if (ret == -1)
+	// 		return (-1);
+	// 	count += ret;
+	// }
+	if (!flags.left_align)
+	{
+		if (zeros > 0)
+		{
+			ret = ft_putnchar('0', zeros);
+			if (ret == -1)
+				return (-1);
+			count += ret;
+		}
+		ret = ft_putbuf(hex_buf, hexlen);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	// ret = ft_putbuf(hex_buf, hexlen);
+	// if (ret == -1)
+	// 	return (-1);
+	// count += ret;
+	// if (flags.left_align)
+	// {
+	// 	ret = ft_putpad(flags.width, contentlen, 0);
+	// 	if (ret == -1)
+	// 		return (-1);
+	// 	count += ret;
+	// }
 	return (count);
 }
 
@@ -512,6 +564,8 @@ int	ft_print_unsigned(unsigned int n, t_flags flags)
 	return (count);
 }
 
+// Effect: -, 0, ., +, and space
+// No effect: #
 int	ft_print_nbr(int n, t_flags flags)
 {
 	int		count;
@@ -521,7 +575,6 @@ int	ft_print_nbr(int n, t_flags flags)
 	int		zeros;
 	int		ret;
 	int		extra_char;
-	int		i;
 
 	count = 0;
 	is_negative = n < 0;
@@ -535,6 +588,7 @@ int	ft_print_nbr(int n, t_flags flags)
 		extra_char = 1;
 	if (flags.precision_set && flags.precision > len)
 		zeros = flags.precision - len;
+	int contentlen = len + zeros + extra_char;
 	// if (!flags.left_align)
 	// {
 	// 	ret = ft_putpad(flags.width, len + zeros + extra_char, flags.zero_pad);
@@ -566,52 +620,98 @@ int	ft_print_nbr(int n, t_flags flags)
 	// 		return (-1);
 	// 	count += ret;
 	// }
-	if (!flags.left_align && flags.zero_pad && !flags.precision_set)
+	if (flags.zero_pad || flags.left_align)
 	{
 		ret = ft_put_sign(is_negative, flags);
 		if (ret == -1)
 			return (-1);
 		count += ret;
-		ret = ft_putpad(flags.width, len + zeros + extra_char, 1);
-		if (ret == -1)
-			return (-1);
-		count += ret;
 	}
-	else
+	if (flags.left_align)
 	{
-		if (!flags.left_align)
+		if (zeros > 0)
 		{
-			ret = ft_putpad(flags.width, len + zeros + extra_char, 0);
+			ret = ft_putnchar('0', zeros);
 			if (ret == -1)
 				return (-1);
 			count += ret;
 		}
+		ret = ft_putbuf(buf, len);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	ret = ft_putpad(flags.width, contentlen, flags.zero_pad);
+	if (ret == -1)
+		return (-1);
+	count += ret;
+	if (!flags.zero_pad && !flags.left_align)
+	{
 		ret = ft_put_sign(is_negative, flags);
 		if (ret == -1)
 			return (-1);
 		count += ret;
 	}
-	if (zeros > 0)
+	if (!flags.left_align)
 	{
-		ret = ft_putnchar('0', zeros);
+		if (zeros > 0)
+		{
+			ret = ft_putnchar('0', zeros);
+			if (ret == -1)
+				return (-1);
+			count += ret;
+		}
+		ret = ft_putbuf(buf, len);
 		if (ret == -1)
 			return (-1);
 		count += ret;
 	}
-	i = len;
-	while (--i >= 0)
-	{
-		if (ft_putchar(buf[i]) == -1)
-			return (-1);
-		count++;
-	}
-	if (flags.left_align)
-	{
-		ret = ft_putpad(flags.width, len + zeros + extra_char, 0);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
+	// if (!flags.left_align && flags.zero_pad && !flags.precision_set)
+	// {
+	// 	ret = ft_put_sign(is_negative, flags);
+	// 	if (ret == -1)
+	// 		return (-1);
+	// 	count += ret;
+	// 	ret = ft_putpad(flags.width, len + zeros + extra_char, 1);
+	// 	if (ret == -1)
+	// 		return (-1);
+	// 	count += ret;
+	// }
+	// else
+	// {
+	// 	if (!flags.left_align)
+	// 	{
+	// 		ret = ft_putpad(flags.width, len + zeros + extra_char, 0);
+	// 		if (ret == -1)
+	// 			return (-1);
+	// 		count += ret;
+	// 	}
+	// 	ret = ft_put_sign(is_negative, flags);
+	// 	if (ret == -1)
+	// 		return (-1);
+	// 	count += ret;
+	// }
+	// if (zeros > 0)
+	// {
+	// 	ret = ft_putnchar('0', zeros);
+	// 	if (ret == -1)
+	// 		return (-1);
+	// 	count += ret;
+	// }
+	// i = len;
+	// while (--i >= 0)
+	// {
+	// 	if (ft_putchar(buf[i]) == -1)
+	// 		return (-1);
+	// 	count++;
+	// }
+	// if (flags.left_align)
+	// {
+	// 	ret = ft_putpad(flags.width, len + zeros + extra_char, 0);
+	// 	if (ret == -1)
+	// 		return (-1);
+	// 	count += ret;
+	// }
 	return (count);
 }
 
