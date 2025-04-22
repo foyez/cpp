@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:57:53 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/22 14:11:28 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/22 20:28:48 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 // }
 
 #include <stdarg.h>
+#include <stdio.h>
 #include <unistd.h>
 
 typedef struct s_flags
@@ -350,6 +351,20 @@ int	ft_putptr(char *buf, int len)
 	return (count);
 }
 
+int	ft_putprefix(int low)
+{
+	int	ret;
+
+	ret = 0;
+	if (low)
+		ret = write(1, "0x", 2);
+	else
+		ret = write(1, "0X", 2);
+	if (ret != 2)
+		return (-1);
+	return (2);
+}
+
 int	ft_print_hex(unsigned int num, t_flags flags, int low)
 {
 	int		count;
@@ -358,6 +373,7 @@ int	ft_print_hex(unsigned int num, t_flags flags, int low)
 	int		hexlen;
 	int		prefixlen;
 	int		zeros;
+	int		i;
 
 	count = 0;
 	ret = 0;
@@ -380,13 +396,10 @@ int	ft_print_hex(unsigned int num, t_flags flags, int low)
 	}
 	if (prefixlen > 0)
 	{
-		if (low)
-			ret = write(1, "0x", 2);
-		else
-			ret = write(1, "0X", 2);
-		if (ret != 2)
+		ret = ft_putprefix(low);
+		if (ret == -1)
 			return (-1);
-		count += 2;
+		count += ret;
 	}
 	if (zeros > 0)
 	{
@@ -395,9 +408,10 @@ int	ft_print_hex(unsigned int num, t_flags flags, int low)
 			return (-1);
 		count += ret;
 	}
-	while (--hexlen >= 0)
+	i = hexlen;
+	while (--i >= 0)
 	{
-		if (ft_putchar(hex_buf[hexlen]) == -1)
+		if (ft_putchar(hex_buf[i]) == -1)
 			return (-1);
 		count++;
 	}
@@ -413,28 +427,13 @@ int	ft_print_hex(unsigned int num, t_flags flags, int low)
 
 static int	ft_put_sign(int is_negative, t_flags flags)
 {
-	int	count;
-
-	count = 0;
 	if (is_negative)
-	{
-		if (ft_putchar('-') == -1)
-			return (-1);
-		count++;
-	}
-	else if (flags.plus_sign)
-	{
-		if (ft_putchar('+') == -1)
-			return (-1);
-		count++;
-	}
+		return (ft_putchar('-'));
+	if (flags.plus_sign)
+		return (ft_putchar('+'));
 	else if (flags.space)
-	{
-		if (ft_putchar(' ') == -1)
-			return (-1);
-		count++;
-	}
-	return (count);
+		return (ft_putchar(' '));
+	return (0);
 }
 
 int	ft_print_unsigned(unsigned int n, t_flags flags)
@@ -444,6 +443,7 @@ int	ft_print_unsigned(unsigned int n, t_flags flags)
 	int		len;
 	int		ret;
 	int		zeros;
+	int		i;
 
 	count = 0;
 	len = ft_utoa(n, buf);
@@ -467,9 +467,10 @@ int	ft_print_unsigned(unsigned int n, t_flags flags)
 			return (-1);
 		count += ret;
 	}
-	while (--len >= 0)
+	i = len;
+	while (--i >= 0)
 	{
-		if (ft_putchar(buf[len]) == -1)
+		if (ft_putchar(buf[i]) == -1)
 			return (-1);
 		count++;
 	}
@@ -492,6 +493,7 @@ int	ft_print_nbr(int n, t_flags flags)
 	int		zeros;
 	int		ret;
 	int		extra_char;
+	int		i;
 
 	count = 0;
 	is_negative = n < 0;
@@ -505,17 +507,62 @@ int	ft_print_nbr(int n, t_flags flags)
 		extra_char = 1;
 	if (flags.precision_set && flags.precision > len)
 		zeros = flags.precision - len;
-	if (!flags.left_align)
+	// if (!flags.left_align)
+	// {
+	// 	ret = ft_putpad(flags.width, len + zeros + extra_char, flags.zero_pad);
+	// 	if (ret == -1)
+	// 		return (-1);
+	// 	count += ret;
+	// }
+	// ret = ft_put_sign(is_negative, flags);
+	// if (ret == -1)
+	// 	return (-1);
+	// count += ret;
+	// if (zeros > 0)
+	// {
+	// 	ret = ft_putnchar('0', zeros);
+	// 	if (ret == -1)
+	// 		return (-1);
+	// 	count += ret;
+	// }
+	// while (--len >= 0)
+	// {
+	// 	if (ft_putchar(buf[len]) == -1)
+	// 		return (-1);
+	// 	count++;
+	// }
+	// if (flags.left_align)
+	// {
+	// 	ret = ft_putpad(flags.width, len + zeros + extra_char, 0);
+	// 	if (ret == -1)
+	// 		return (-1);
+	// 	count += ret;
+	// }
+	if (!flags.left_align && flags.zero_pad && !flags.precision_set)
 	{
-		ret = ft_putpad(flags.width, len + zeros + extra_char, flags.zero_pad);
+		ret = ft_put_sign(is_negative, flags);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+		ret = ft_putpad(flags.width, len + zeros + extra_char, 1);
 		if (ret == -1)
 			return (-1);
 		count += ret;
 	}
-	ret = ft_put_sign(is_negative, flags);
-	if (ret == -1)
-		return (-1);
-	count += ret;
+	else
+	{
+		if (!flags.left_align)
+		{
+			ret = ft_putpad(flags.width, len + zeros + extra_char, 0);
+			if (ret == -1)
+				return (-1);
+			count += ret;
+		}
+		ret = ft_put_sign(is_negative, flags);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
 	if (zeros > 0)
 	{
 		ret = ft_putnchar('0', zeros);
@@ -523,9 +570,10 @@ int	ft_print_nbr(int n, t_flags flags)
 			return (-1);
 		count += ret;
 	}
-	while (--len >= 0)
+	i = len;
+	while (--i >= 0)
 	{
-		if (ft_putchar(buf[len]) == -1)
+		if (ft_putchar(buf[i]) == -1)
 			return (-1);
 		count++;
 	}
@@ -627,23 +675,27 @@ int	ft_printf(const char *format, ...)
 	return (count);
 }
 
-#include <limits.h>
-#include <stdio.h>
-#include <unistd.h>
+// #include <limits.h>
+// #include <unistd.h>
 
-int	main(void)
-{
-	int	x;
-	int	ret;
+// // "%-d, %-d, %-d, %-d, %-d, %-d, %-d, %-d", 0, 5, -1, -10, 100,
+// // -1862, INT_MIN, INT_MAX
+// int	main(void)
+// {
+// 	int	x;
+// 	int	ret;
 
-	x = 42;
-	// close(1); // Close STDOUT manually
-	// ret = ft_printf("%u", 0);
-	ret = ft_printf("%05d, %05d", -1, -10);
-	printf("\n%d\n", ret);
-	ret = printf("%05d, %05d", -1, -10);
-	printf("\n%d\n", ret);
-	if (ret == -1)
-		write(2, "ft_printf failed!\n", 18); // fallback to stderr
-	return (0);
-}
+// 	x = 42;
+// 	// close(1); // Close STDOUT manually
+// 	// ret = ft_printf("%u", 0);
+// 	ret = ft_printf("%0#5x", 5);
+// 	printf("\n%d\n", ret);
+// 	// ret = printf("%-d, %-d, %-d, %-d, %-d, %-d, %-d, %-d", 0, 5, -1, -10,
+// 	// 100,
+// 	// 		-1862, INT_MIN, INT_MAX);
+// 	ret = printf("%0#5x", 5);
+// 	printf("\n%d\n", ret);
+// 	if (ret == -1)
+// 		write(2, "ft_printf failed!\n", 18); // fallback to stderr
+// 	return (0);
+// }
