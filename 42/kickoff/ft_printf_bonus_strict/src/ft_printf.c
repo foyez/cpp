@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:57:53 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/22 12:12:54 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/22 14:11:28 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,20 @@
 // 	return (count);
 // }
 
-#include <unistd.h>
 #include <stdarg.h>
+#include <unistd.h>
 
 typedef struct s_flags
 {
-	int		left_align;
-	int		width;
-	int		precision;
-	int		precision_set;
-	int		zero_pad;
-	int		plus_sign;
-	int		space;
-	int		alt_form;
-}			t_flags;
+	int				left_align;
+	int				width;
+	int				precision;
+	int				precision_set;
+	int				zero_pad;
+	int				plus_sign;
+	int				space;
+	int				alt_form;
+}					t_flags;
 
 static t_flags	*ft_init_flags(t_flags *flags)
 {
@@ -123,16 +123,17 @@ const char	*ft_parse_flags(const char *fmt, t_flags *flags)
 	return (fmt);
 }
 
-int ft_putchar(char c)
+int	ft_putchar(char c)
 {
-	return write(1, &c, 1);
+	return (write(1, &c, 1));
 }
 
-int ft_putnchar(char c, int n)
+int	ft_putnchar(char c, int n)
 {
-	int i = 0;
-	int ret;
+	int	i;
+	int	ret;
 
+	i = 0;
 	while (i < n)
 	{
 		ret = ft_putchar(c);
@@ -143,29 +144,33 @@ int ft_putnchar(char c, int n)
 	return (n);
 }
 
-int ft_putpad(int width, int len, int zero_pad)
+int	ft_putpad(int width, int len, int zero_pad)
 {
-	char pad_ch = ' ';
-	int padlen = 0;
+	char	pad_ch;
+	int		padlen;
 
+	pad_ch = ' ';
+	padlen = 0;
 	if (width > len)
 		padlen = width - len;
 	if (zero_pad)
 		pad_ch = '0';
-	return ft_putnchar(pad_ch, padlen);
+	return (ft_putnchar(pad_ch, padlen));
 }
 
-int ft_print_char(char c, t_flags flags)
+int	ft_print_char(char c, t_flags flags)
 {
-	int count = 0;
+	int	count;
+	int	ret;
 
+	count = 0;
 	if (flags.left_align)
 	{
 		if (ft_putchar(c) == -1)
 			return (-1);
 		count++;
 	}
-	int ret = ft_putpad(flags.width, 1, flags.zero_pad);
+	ret = ft_putpad(flags.width, 1, flags.zero_pad);
 	if (ret == -1)
 		return (-1);
 	count += ret;
@@ -188,12 +193,14 @@ int	ft_strlen(const char *str)
 	return (len);
 }
 
-int ft_putnstr(const char *s, int n)
+int	ft_putnstr(const char *s, int n)
 {
+	int	ret;
+
 	// int i = 0;
 	if (!s)
 		s = "(null)";
-	int ret = write(1, s, n);
+	ret = write(1, s, n);
 	if (ret != n)
 		return (-1);
 	return (ret);
@@ -203,17 +210,22 @@ int ft_putnstr(const char *s, int n)
 	// 		return (-1);
 	// 	i++;
 	// }
-	// return i;
+	// return (i);
 }
 
 int	ft_print_str(const char *str, t_flags flags)
 {
-	int count = 0;
-	int ret = 0;
+	int	count;
+	int	ret;
+	int	strlen;
+	int	printlen;
+
+	count = 0;
+	ret = 0;
 	if (!str)
 		str = "(null)";
-	int strlen = ft_strlen(str);
-	int printlen = strlen;
+	strlen = ft_strlen(str);
+	printlen = strlen;
 	if (flags.precision_set && flags.precision < printlen)
 		printlen = flags.precision;
 	if (flags.left_align)
@@ -239,9 +251,10 @@ int	ft_print_str(const char *str, t_flags flags)
 
 static int	ft_utoa_ptr(unsigned long num, char *buf)
 {
-	const char *hex = "0123456789abcdef";
-	int i = 0;
+	const char	*hex = "0123456789abcdef";
+	int			i;
 
+	i = 0;
 	if (num == 0)
 	{
 		buf[i++] = '0';
@@ -257,10 +270,11 @@ static int	ft_utoa_ptr(unsigned long num, char *buf)
 
 static int	ft_utoa_hex(unsigned int num, char *buf, int low)
 {
-	const char *hex = "0123456789abcdef";
-	int i = 0;
-	int rem;
+	const char	*hex = "0123456789abcdef";
+	int			i;
+	int			rem;
 
+	i = 0;
 	if (num == 0)
 	{
 		buf[i++] = '0';
@@ -278,11 +292,12 @@ static int	ft_utoa_hex(unsigned int num, char *buf, int low)
 	return (i);
 }
 
-int ft_itoa(int n, char *buf)
+int	ft_itoa(int n, char *buf)
 {
-	unsigned int num;
-	int i = 0;
+	unsigned int	num;
+	int				i;
 
+	i = 0;
 	if (n < 0)
 		num = (unsigned int)(-n);
 	else
@@ -297,10 +312,11 @@ int ft_itoa(int n, char *buf)
 	return (i);
 }
 
-int ft_utoa(unsigned int n, char *buf)
+int	ft_utoa(unsigned int n, char *buf)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	if (n == 0)
 		buf[i++] = '0';
 	while (n)
@@ -311,11 +327,13 @@ int ft_utoa(unsigned int n, char *buf)
 	return (i);
 }
 
-int ft_putptr(char *buf, int len)
+int	ft_putptr(char *buf, int len)
 {
-	int count = 0;
+	int	count;
+	int	ret;
 
-	int ret = write(1, "0x", 2);
+	count = 0;
+	ret = write(1, "0x", 2);
 	if (ret != 2)
 		return (-1);
 	count += ret;
@@ -334,13 +352,18 @@ int ft_putptr(char *buf, int len)
 
 int	ft_print_hex(unsigned int num, t_flags flags, int low)
 {
-	int count = 0;
-	int ret = 0;
-	char hex_buf[16];
-	int hexlen = ft_utoa_hex(num, hex_buf, low);
-	int prefixlen = 0;
-	int zeros = 0;
+	int		count;
+	int		ret;
+	char	hex_buf[16];
+	int		hexlen;
+	int		prefixlen;
+	int		zeros;
 
+	count = 0;
+	ret = 0;
+	hexlen = ft_utoa_hex(num, hex_buf, low);
+	prefixlen = 0;
+	zeros = 0;
 	if (flags.precision == 0 && num == 0)
 		hexlen = 0;
 	if (flags.alt_form && num != 0)
@@ -349,7 +372,8 @@ int	ft_print_hex(unsigned int num, t_flags flags, int low)
 		zeros = flags.precision - hexlen;
 	if (!flags.left_align)
 	{
-		ret = ft_putpad(flags.width, prefixlen + zeros + hexlen, flags.zero_pad);
+		ret = ft_putpad(flags.width, prefixlen + zeros + hexlen,
+				flags.zero_pad);
 		if (ret == -1)
 			return (-1);
 		count += ret;
@@ -389,7 +413,9 @@ int	ft_print_hex(unsigned int num, t_flags flags, int low)
 
 static int	ft_put_sign(int is_negative, t_flags flags)
 {
-	int count = 0;
+	int	count;
+
+	count = 0;
 	if (is_negative)
 	{
 		if (ft_putchar('-') == -1)
@@ -411,14 +437,18 @@ static int	ft_put_sign(int is_negative, t_flags flags)
 	return (count);
 }
 
-int ft_print_unsigned(unsigned int n, t_flags flags)
+int	ft_print_unsigned(unsigned int n, t_flags flags)
 {
-	int count = 0;
-	char buf[16];
-	int len = ft_utoa(n, buf);
-	int ret = 0;
-	int zeros = 0;
+	int		count;
+	char	buf[16];
+	int		len;
+	int		ret;
+	int		zeros;
 
+	count = 0;
+	len = ft_utoa(n, buf);
+	ret = 0;
+	zeros = 0;
 	if (flags.precision == 0 && n == 0)
 		len = 0;
 	if (flags.precision_set && flags.precision > len)
@@ -453,18 +483,24 @@ int ft_print_unsigned(unsigned int n, t_flags flags)
 	return (count);
 }
 
-int ft_print_nbr(int n, t_flags flags)
+int	ft_print_nbr(int n, t_flags flags)
 {
-	int count = 0;
-	char buf[16];
-	int is_negative = n < 0;
-	int len = ft_itoa(n, buf);
-	int zeros = 0;
-	int ret = 0;
+	int		count;
+	char	buf[16];
+	int		is_negative;
+	int		len;
+	int		zeros;
+	int		ret;
+	int		extra_char;
 
+	count = 0;
+	is_negative = n < 0;
+	len = ft_itoa(n, buf);
+	zeros = 0;
+	ret = 0;
 	if (flags.precision == 0 && n == 0)
 		len = 0;
-	int extra_char = 0;
+	extra_char = 0;
 	if (is_negative || flags.plus_sign || flags.space)
 		extra_char = 1;
 	if (flags.precision_set && flags.precision > len)
@@ -505,12 +541,16 @@ int ft_print_nbr(int n, t_flags flags)
 
 int	ft_print_ptr(unsigned long ptr, t_flags flags)
 {
-	int count = 0;
-	int ret = 0;
-	char hex_buf[32];
-	int hexlen = ft_utoa_ptr(ptr, hex_buf);
-	int printlen = 2 + hexlen;
+	int		count;
+	int		ret;
+	char	hex_buf[32];
+	int		hexlen;
+	int		printlen;
 
+	count = 0;
+	ret = 0;
+	hexlen = ft_utoa_ptr(ptr, hex_buf);
+	printlen = 2 + hexlen;
 	if (flags.left_align)
 	{
 		ret = ft_putptr(hex_buf, hexlen);
@@ -529,7 +569,6 @@ int	ft_print_ptr(unsigned long ptr, t_flags flags)
 			return (-1);
 		count += ret;
 	}
-
 	return (count);
 }
 
@@ -588,16 +627,23 @@ int	ft_printf(const char *format, ...)
 	return (count);
 }
 
-// #include <unistd.h>
-// #include <stdio.h>
+#include <limits.h>
+#include <stdio.h>
+#include <unistd.h>
 
-// int main(void)
-// {
-// 	int x = 42;
-// 	// close(1); // Close STDOUT manually
-// 	int ret = ft_printf("%u", 0);
-// 	printf("\n%d\n", ret);
-// 	if (ret == -1)
-// 		write(2, "ft_printf failed!\n", 18); // fallback to stderr
-// 	return 0;
-// }
+int	main(void)
+{
+	int	x;
+	int	ret;
+
+	x = 42;
+	// close(1); // Close STDOUT manually
+	// ret = ft_printf("%u", 0);
+	ret = ft_printf("%05d, %05d", -1, -10);
+	printf("\n%d\n", ret);
+	ret = printf("%05d, %05d", -1, -10);
+	printf("\n%d\n", ret);
+	if (ret == -1)
+		write(2, "ft_printf failed!\n", 18); // fallback to stderr
+	return (0);
+}
