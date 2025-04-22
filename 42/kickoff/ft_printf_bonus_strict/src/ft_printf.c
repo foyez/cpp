@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:57:53 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/21 18:41:11 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/22 12:12:54 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,86 @@
 
 #include <unistd.h>
 #include <stdarg.h>
-#include <stddef.h> // for NULL
+
+typedef struct s_flags
+{
+	int		left_align;
+	int		width;
+	int		precision;
+	int		precision_set;
+	int		zero_pad;
+	int		plus_sign;
+	int		space;
+	int		alt_form;
+}			t_flags;
+
+static t_flags	*ft_init_flags(t_flags *flags)
+{
+	flags->left_align = 0;
+	flags->width = 0;
+	flags->precision = -1;
+	flags->precision_set = 0;
+	flags->zero_pad = 0;
+	flags->plus_sign = 0;
+	flags->space = 0;
+	flags->alt_form = 0;
+	return (flags);
+}
+
+static const char	*ft_parse_num(const char *format, int *num)
+{
+	*num = 0;
+	while (*format >= '0' && *format <= '9')
+	{
+		*num = *num * 10 + (*format - '0');
+		format++;
+	}
+	return (format);
+}
+
+static t_flags	ft_left_align(t_flags flags)
+{
+	flags.left_align = 1;
+	flags.zero_pad = 0;
+	return (flags);
+}
+
+static t_flags	ft_plus_sign(t_flags flags)
+{
+	flags.plus_sign = 1;
+	flags.space = 0;
+	return (flags);
+}
+
+const char	*ft_parse_flags(const char *fmt, t_flags *flags)
+{
+	ft_init_flags(flags);
+	while (*fmt == '-' || *fmt == '0' || *fmt == '+' || *fmt == ' '
+		|| *fmt == '#')
+	{
+		if (*fmt == '-')
+			*flags = ft_left_align(*flags);
+		if (*fmt == '0' && !flags->left_align)
+			flags->zero_pad = 1;
+		if (*fmt == '+')
+			*flags = ft_plus_sign(*flags);
+		if (*fmt == ' ' && !flags->plus_sign)
+			flags->space = 1;
+		if (*fmt == '#')
+			flags->alt_form = 1;
+		fmt++;
+	}
+	fmt = ft_parse_num(fmt, &flags->width);
+	if (*fmt == '.')
+	{
+		fmt++;
+		flags->precision_set = 1;
+		flags->precision = 0;
+		flags->zero_pad = 0;
+		fmt = ft_parse_num(fmt, &flags->precision);
+	}
+	return (fmt);
+}
 
 int ft_putchar(char c)
 {
@@ -52,184 +131,473 @@ int ft_putchar(char c)
 int ft_putnchar(char c, int n)
 {
 	int i = 0;
+	int ret;
+
 	while (i < n)
+	{
+		ret = ft_putchar(c);
+		if (ret == -1)
+			return (-1);
+		i++;
+	}
+	return (n);
+}
+
+int ft_putpad(int width, int len, int zero_pad)
+{
+	char pad_ch = ' ';
+	int padlen = 0;
+
+	if (width > len)
+		padlen = width - len;
+	if (zero_pad)
+		pad_ch = '0';
+	return ft_putnchar(pad_ch, padlen);
+}
+
+int ft_print_char(char c, t_flags flags)
+{
+	int count = 0;
+
+	if (flags.left_align)
 	{
 		if (ft_putchar(c) == -1)
 			return (-1);
-		i++;
+		count++;
 	}
-	return n;
-}
-
-int ft_putstrn(const char *s, int n)
-{
-	int i = 0;
-	if (!s)
-		s = "(null)";
-	while (s[i] && i < n)
-	{
-		if (ft_putchar(s[i]) == -1)
-			return (-1);
-		i++;
-	}
-	return i;
-}
-
-int ft_print_char(char c, int width, int left_align, int zero_pad)
-{
-	int count = 0;
-	int pad_len = width > 1 ? width - 1 : 0;
-
-	if (!left_align)
-	{
-		int ret = ft_putnchar(zero_pad ? '0' : ' ', pad_len);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
-
-	if (ft_putchar(c) == -1)
-		return (-1);
-	count++;
-
-	if (left_align)
-	{
-		int ret = ft_putnchar(' ', pad_len);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
-	return count;
-}
-
-int ft_strlen(const char *s)
-{
-	int len = 0;
-	while (s && s[len])
-		len++;
-	return len;
-}
-
-int ft_print_string(const char *s, int width, int precision, int precision_set, int left_align)
-{
-	int count = 0;
-	int str_len = s ? ft_strlen(s) : 6; // "(null)" is 6 chars
-	int print_len = str_len;
-
-	if (!s)
-		s = "(null)";
-	if (precision_set && precision < print_len)
-		print_len = precision;
-
-	int pad_len = width > print_len ? width - print_len : 0;
-
-	if (!left_align)
-	{
-		int ret = ft_putnchar(' ', pad_len);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
-
-	int ret = ft_putstrn(s, print_len);
+	int ret = ft_putpad(flags.width, 1, flags.zero_pad);
 	if (ret == -1)
 		return (-1);
 	count += ret;
-
-	if (left_align)
+	if (!flags.left_align)
 	{
-		ret = ft_putnchar(' ', pad_len);
+		if (ft_putchar(c) == -1)
+			return (-1);
+		count++;
+	}
+	return (count);
+}
+
+int	ft_strlen(const char *str)
+{
+	int	len;
+
+	len = 0;
+	while (str && str[len])
+		len++;
+	return (len);
+}
+
+int ft_putnstr(const char *s, int n)
+{
+	// int i = 0;
+	if (!s)
+		s = "(null)";
+	int ret = write(1, s, n);
+	if (ret != n)
+		return (-1);
+	return (ret);
+	// while (s[i] && i < n)
+	// {
+	// 	if (ft_putchar(s[i]) == -1)
+	// 		return (-1);
+	// 	i++;
+	// }
+	// return i;
+}
+
+int	ft_print_str(const char *str, t_flags flags)
+{
+	int count = 0;
+	int ret = 0;
+	if (!str)
+		str = "(null)";
+	int strlen = ft_strlen(str);
+	int printlen = strlen;
+	if (flags.precision_set && flags.precision < printlen)
+		printlen = flags.precision;
+	if (flags.left_align)
+	{
+		ret = ft_putnstr(str, printlen);
 		if (ret == -1)
 			return (-1);
 		count += ret;
 	}
-	return count;
+	ret = ft_putpad(flags.width, printlen, 0);
+	if (ret == -1)
+		return (-1);
+	count += ret;
+	if (!flags.left_align)
+	{
+		ret = ft_putnstr(str, printlen);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	return (count);
 }
 
-int ft_printf(const char *format, ...)
+static int	ft_utoa_ptr(unsigned long num, char *buf)
 {
-	va_list args;
-	int total = 0;
+	const char *hex = "0123456789abcdef";
 	int i = 0;
 
-	va_start(args, format);
-
-	while (format[i])
+	if (num == 0)
 	{
-		if (format[i] == '%' && format[i + 1])
+		buf[i++] = '0';
+		return (i);
+	}
+	while (num)
+	{
+		buf[i++] = hex[num % 16];
+		num /= 16;
+	}
+	return (i);
+}
+
+static int	ft_utoa_hex(unsigned int num, char *buf, int low)
+{
+	const char *hex = "0123456789abcdef";
+	int i = 0;
+	int rem;
+
+	if (num == 0)
+	{
+		buf[i++] = '0';
+		return (i);
+	}
+	while (num)
+	{
+		rem = num % 16;
+		if (rem > 9 && !low)
+			buf[i++] = hex[rem] - 32;
+		else
+			buf[i++] = hex[rem];
+		num /= 16;
+	}
+	return (i);
+}
+
+int ft_itoa(int n, char *buf)
+{
+	unsigned int num;
+	int i = 0;
+
+	if (n < 0)
+		num = (unsigned int)(-n);
+	else
+		num = (unsigned int)n;
+	if (num == 0)
+		buf[i++] = '0';
+	while (num)
+	{
+		buf[i++] = (num % 10) + '0';
+		num /= 10;
+	}
+	return (i);
+}
+
+int ft_utoa(unsigned int n, char *buf)
+{
+	int i = 0;
+
+	if (n == 0)
+		buf[i++] = '0';
+	while (n)
+	{
+		buf[i++] = (n % 10) + '0';
+		n /= 10;
+	}
+	return (i);
+}
+
+int ft_putptr(char *buf, int len)
+{
+	int count = 0;
+
+	int ret = write(1, "0x", 2);
+	if (ret != 2)
+		return (-1);
+	count += ret;
+	// ret = write(1, buf, len);
+	// if (ret == -1)
+	// 	return (-1);
+	// count += ret;
+	while (--len >= 0)
+	{
+		if (ft_putchar(buf[len]) == -1)
+			return (-1);
+		count++;
+	}
+	return (count);
+}
+
+int	ft_print_hex(unsigned int num, t_flags flags, int low)
+{
+	int count = 0;
+	int ret = 0;
+	char hex_buf[16];
+	int hexlen = ft_utoa_hex(num, hex_buf, low);
+	int prefixlen = 0;
+	int zeros = 0;
+
+	if (flags.precision == 0 && num == 0)
+		hexlen = 0;
+	if (flags.alt_form && num != 0)
+		prefixlen = 2;
+	if (flags.precision_set && flags.precision > hexlen)
+		zeros = flags.precision - hexlen;
+	if (!flags.left_align)
+	{
+		ret = ft_putpad(flags.width, prefixlen + zeros + hexlen, flags.zero_pad);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	if (prefixlen > 0)
+	{
+		if (low)
+			ret = write(1, "0x", 2);
+		else
+			ret = write(1, "0X", 2);
+		if (ret != 2)
+			return (-1);
+		count += 2;
+	}
+	if (zeros > 0)
+	{
+		ret = ft_putnchar('0', zeros);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	while (--hexlen >= 0)
+	{
+		if (ft_putchar(hex_buf[hexlen]) == -1)
+			return (-1);
+		count++;
+	}
+	if (flags.left_align)
+	{
+		ret = ft_putpad(flags.width, prefixlen + zeros + hexlen, 0);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	return (count);
+}
+
+static int	ft_put_sign(int is_negative, t_flags flags)
+{
+	int count = 0;
+	if (is_negative)
+	{
+		if (ft_putchar('-') == -1)
+			return (-1);
+		count++;
+	}
+	else if (flags.plus_sign)
+	{
+		if (ft_putchar('+') == -1)
+			return (-1);
+		count++;
+	}
+	else if (flags.space)
+	{
+		if (ft_putchar(' ') == -1)
+			return (-1);
+		count++;
+	}
+	return (count);
+}
+
+int ft_print_unsigned(unsigned int n, t_flags flags)
+{
+	int count = 0;
+	char buf[16];
+	int len = ft_utoa(n, buf);
+	int ret = 0;
+	int zeros = 0;
+
+	if (flags.precision == 0 && n == 0)
+		len = 0;
+	if (flags.precision_set && flags.precision > len)
+		zeros = flags.precision - len;
+	if (!flags.left_align)
+	{
+		ret = ft_putpad(flags.width, len + zeros, flags.zero_pad);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	if (zeros > 0)
+	{
+		ret = ft_putnchar('0', zeros);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	while (--len >= 0)
+	{
+		if (ft_putchar(buf[len]) == -1)
+			return (-1);
+		count++;
+	}
+	if (flags.left_align)
+	{
+		ret = ft_putpad(flags.width, len + zeros, 0);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	return (count);
+}
+
+int ft_print_nbr(int n, t_flags flags)
+{
+	int count = 0;
+	char buf[16];
+	int is_negative = n < 0;
+	int len = ft_itoa(n, buf);
+	int zeros = 0;
+	int ret = 0;
+
+	if (flags.precision == 0 && n == 0)
+		len = 0;
+	int extra_char = 0;
+	if (is_negative || flags.plus_sign || flags.space)
+		extra_char = 1;
+	if (flags.precision_set && flags.precision > len)
+		zeros = flags.precision - len;
+	if (!flags.left_align)
+	{
+		ret = ft_putpad(flags.width, len + zeros + extra_char, flags.zero_pad);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	ret = ft_put_sign(is_negative, flags);
+	if (ret == -1)
+		return (-1);
+	count += ret;
+	if (zeros > 0)
+	{
+		ret = ft_putnchar('0', zeros);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	while (--len >= 0)
+	{
+		if (ft_putchar(buf[len]) == -1)
+			return (-1);
+		count++;
+	}
+	if (flags.left_align)
+	{
+		ret = ft_putpad(flags.width, len + zeros + extra_char, 0);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	return (count);
+}
+
+int	ft_print_ptr(unsigned long ptr, t_flags flags)
+{
+	int count = 0;
+	int ret = 0;
+	char hex_buf[32];
+	int hexlen = ft_utoa_ptr(ptr, hex_buf);
+	int printlen = 2 + hexlen;
+
+	if (flags.left_align)
+	{
+		ret = ft_putptr(hex_buf, hexlen);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+	ret = ft_putpad(flags.width, printlen, 0);
+	if (ret == -1)
+		return (-1);
+	count += ret;
+	if (!flags.left_align)
+	{
+		ret = ft_putptr(hex_buf, hexlen);
+		if (ret == -1)
+			return (-1);
+		count += ret;
+	}
+
+	return (count);
+}
+
+int	ft_handle_format(char c, va_list *args, t_flags flags)
+{
+	if (c == 'c')
+		return (ft_print_char(va_arg(*args, int), flags));
+	if (c == '%')
+		return (ft_print_char('%', flags));
+	if (c == 's')
+		return (ft_print_str(va_arg(*args, char *), flags));
+	if (c == 'd' || c == 'i')
+		return (ft_print_nbr(va_arg(*args, int), flags));
+	if (c == 'u')
+		return (ft_print_unsigned(va_arg(*args, unsigned int), flags));
+	if (c == 'p')
+		return (ft_print_ptr(va_arg(*args, unsigned long), flags));
+	if (c == 'x')
+		return (ft_print_hex(va_arg(*args, unsigned int), flags, 1));
+	if (c == 'X')
+		return (ft_print_hex(va_arg(*args, unsigned int), flags, 0));
+	return (-1);
+}
+
+int	ft_error(va_list args)
+{
+	va_end(args);
+	return (-1);
+}
+
+int	ft_printf(const char *format, ...)
+{
+	va_list	args;
+	int		count;
+	t_flags	flags;
+	int		ret;
+
+	count = 0;
+	va_start(args, format);
+	while (*format)
+	{
+		if (*format == '%' && *(format + 1))
 		{
-			i++;
-			int left_align = 0;
-			int zero_pad = 0;
-			int width = 0;
-			int precision = 0;
-			int precision_set = 0;
-
-			// flags
-			while (format[i] == '-' || format[i] == '0' || format[i] == '#' ||
-				   format[i] == '+' || format[i] == ' ' || format[i] == '.')
-			{
-				if (format[i] == '-')
-					left_align = 1;
-				else if (format[i] == '0')
-					zero_pad = 1;
-				else if (format[i] == '.')
-				{
-					precision_set = 1;
-					precision = 0;
-					i++;
-					while (format[i] >= '0' && format[i] <= '9')
-					{
-						precision = precision * 10 + (format[i] - '0');
-						i++;
-					}
-					continue;
-				}
-				i++;
-			}
-
-			// width
-			while (format[i] >= '0' && format[i] <= '9')
-			{
-				width = width * 10 + (format[i] - '0');
-				i++;
-			}
-
-			if (format[i] == 'c')
-			{
-				char c = (char)va_arg(args, int);
-				int ret = ft_print_char(c, width, left_align, zero_pad);
-				if (ret == -1)
-					return (-1);
-				total += ret;
-				i++;
-			}
-			else if (format[i] == 's')
-			{
-				const char *s = va_arg(args, const char *);
-				int ret = ft_print_string(s, width, precision, precision_set, left_align);
-				if (ret == -1)
-					return (-1);
-				total += ret;
-				i++;
-			}
-			else
-			{
-				// unrecognized specifier
-				if (ft_putchar('%') == -1 || ft_putchar(format[i]) == -1)
-					return (-1);
-				total += 2;
-				i++;
-			}
+			format++;
+			format = ft_parse_flags(format, &flags);
+			ret = ft_handle_format(*format, &args, flags);
 		}
 		else
-		{
-			if (ft_putchar(format[i]) == -1)
-				return (-1);
-			total++;
-			i++;
-		}
+			ret = ft_putchar(*format);
+		if (ret == -1)
+			return (ft_error(args));
+		count += ret;
+		format++;
 	}
 	va_end(args);
-	return total;
+	return (count);
 }
+
+// #include <unistd.h>
+// #include <stdio.h>
+
+// int main(void)
+// {
+// 	int x = 42;
+// 	// close(1); // Close STDOUT manually
+// 	int ret = ft_printf("%u", 0);
+// 	printf("\n%d\n", ret);
+// 	if (ret == -1)
+// 		write(2, "ft_printf failed!\n", 18); // fallback to stderr
+// 	return 0;
+// }
