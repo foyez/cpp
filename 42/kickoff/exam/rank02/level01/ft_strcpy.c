@@ -24,15 +24,15 @@ char	*ft_strcpy(char *s1, char *s2)
 	return (s1);
 }
 
-#include <stdio.h>
+// #include <stdio.h>
 
-int	main(void)
-{
-	char	*s2;
-	char	s1[20];
+// int	main(void)
+// {
+// 	char	*s2;
+// 	char	s1[20];
 
-	s2 = "Hello World!";
-	ft_strcpy(s1, s2);
-	printf("%s\n", s1);
-	return (0);
-}
+// 	s2 = "Hello World!";
+// 	ft_strcpy(s1, s2);
+// 	printf("%s\n", s1);
+// 	return (0);
+// }
