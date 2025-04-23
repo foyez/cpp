@@ -1,0 +1,5 @@
+rush-00
+*.out
+.vscode/
+.DS_Store
+test_cases.txt

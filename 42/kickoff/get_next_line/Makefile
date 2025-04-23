@@ -5,46 +5,34 @@
 #                                                     +:+ +:+         +:+      #
 #    By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/03/19 21:57:58 by kaahmed           #+#    #+#              #
-#    Updated: 2025/04/23 23:51:50 by kaahmed          ###   ########.fr        #
+#    Created: 2025/04/23 23:30:17 by kaahmed           #+#    #+#              #
+#    Updated: 2025/04/23 23:48:28 by kaahmed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libftprintf.a
-NAME_LIBFT = libft.a
+NAME = libgnl.a
 BINARY = test_main.out
 
-SRC_DIR = src
-INC_DIR = include
 OBJ_DIR = obj
-LIBFT_DIR = libft
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -I $(INC_DIR)
+CFLAGS = -Wall -Wextra -Werror -g
 VALGRIND_ARGS = --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 
 NORM = norminette
 NORM_FLAGS = -R CheckForbiddenSourceHeader -R CheckDefine
 
-SRC_FILES = $(SRC_DIR)/ft_printf.c $(SRC_DIR)/parse_flags.c $(SRC_DIR)/handle_format.c \
-						$(SRC_DIR)/print_char.c $(SRC_DIR)/print_str.c $(SRC_DIR)/print_ptr.c \
-						$(SRC_DIR)/print_nbr.c $(SRC_DIR)/print_unsigned.c $(SRC_DIR)/print_hex.c \
-						$(SRC_DIR)/ft_put_utils.c $(SRC_DIR)/utils.c
-HEADER_FILES = $(INC_DIR)/ft_printf.h
+SRC_FILES = get_next_line.c get_next_line_utils.c
+HEADER_FILES = get_next_line.h
 
-OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+OBJ_FILES = $(SRC_FILES:%.c=$(OBJ_DIR)/%.o)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(NAME_LIBFT) $(OBJ_FILES) $(HEADER_FILES)
+$(NAME): $(OBJ_FILES)
 	ar rcs $(NAME) $(OBJ_FILES)
-
-$(NAME_LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
-	cp $(LIBFT_DIR)/$(NAME_LIBFT) .
-	mv $(NAME_LIBFT) $(NAME)
 
 all: $(NAME)
 
@@ -52,11 +40,9 @@ bonus: all
 
 clean:
 	rm -rf $(OBJ_DIR)
-	make clean -C $(LIBFT_DIR)
 
 fclean: clean
 	rm -f $(NAME) $(BINARY)
-	make fclean -C $(LIBFT_DIR)
 
 re: fclean all
 
@@ -65,7 +51,7 @@ norm:
 	$(NORM) $(NORM_FLAGS) $(SRC_FILES) $(HEADER_FILES)
 
 build: $(NAME)
-	$(CC) -I $(INC_DIR) tests/test_main.c $(NAME) -o $(BINARY)
+	$(CC) tests/test_main.c $(NAME) -o $(BINARY)
 	
 run: build
 	@echo "Running the app..."
