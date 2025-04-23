@@ -1332,10 +1332,14 @@ You will need to enter your password and choose a text editor.
 
 <img width="650" src="https://github.com/f-corvaro/42.common_core/blob/main/01-born2beroot/.extra/109.png">
 
-Add the following rule to the file to execute the script every 10 minutes:
+Add the following rule to the file to execute the script at startup and every 10 minutes:
 
 ```sh
-*/10 * * * * sh /home/fcorvaro/monitoring.sh
+# script will execute at startup
+@reboot sh /home/username/monitoring.sh
+
+# script will exececute every 10 minues
+*/10 * * * * sh /home/username/monitoring.sh
 ```
 
 <img width="650" src="https://github.com/f-corvaro/42.common_core/blob/main/01-born2beroot/.extra/110.png">
