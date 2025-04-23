@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 02:18:35 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 02:20:15 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/23 20:47:42 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,111 +14,90 @@
 
 static int	ft_utoa_hex(unsigned int num, char *buf, int low)
 {
-	const char	*hex = "0123456789abcdef";
+	char	*hex;
 	int			i;
-	int			rem;
 
+	hex = "0123456789abcdef";
+	if (!low)
+		hex = "0123456789ABCDEF";
 	i = 0;
 	if (num == 0)
-	{
 		buf[i++] = '0';
-		return (i);
-	}
 	while (num)
 	{
-		rem = num % 16;
-		if (rem > 9 && !low)
-			buf[i++] = hex[rem] - 32;
-		else
-			buf[i++] = hex[rem];
+		buf[i++] = hex[num % 16];
 		num /= 16;
 	}
 	return (i);
 }
 
-int	ft_putprefix(int low)
+static int	ft_putprefix_if(int prefixlen, int low)
 {
 	int	ret;
+	char *prefix_str;
 
-	ret = 0;
-	if (low)
-		ret = write(1, "0x", 2);
-	else
-		ret = write(1, "0X", 2);
+	if (prefixlen == 0)
+		return (0);
+	prefix_str = "0x";
+	if (!low)
+		prefix_str = "0X";
+	ret = ft_putnstr(prefix_str, prefixlen);
 	if (ret != 2)
 		return (-1);
-	return (2);
+	return (ret);
+}
+
+static int	ft_puthex_content(t_flags f, t_vars v, char *buf, int p_len, int low)
+{
+	if (f.zero_pad || f.left_align)
+	{
+		v.ret = ft_putprefix_if(p_len, low);
+		if (!safe_count(v.ret, &v.count))
+			return (-1);
+	}
+	if (f.left_align)
+	{
+		v.ret = ft_putbuf(buf, v.len, v.zeros);
+		if (!safe_count(v.ret, &v.count))
+			return (-1);
+	}
+	v.ret = ft_putpad(f.width, v.contentlen, f.zero_pad);
+	if (!safe_count(v.ret, &v.count))
+			return (-1);
+	if (!f.zero_pad && !f.left_align)
+	{
+		v.ret = ft_putprefix_if(p_len, low);
+		if (!safe_count(v.ret, &v.count))
+			return (-1);
+	}
+	if (!f.left_align)
+	{
+		v.ret = ft_putbuf(buf, v.len, v.zeros);
+		if (!safe_count(v.ret, &v.count))
+			return (-1);
+	}
+	return (v.count);
 }
 
 // Effect: -, 0, ., and #
 // No Effect: + and space
 int	print_hex(unsigned int num, t_flags flags, int low)
 {
-	int		count;
-	int		ret;
-	char	hex_buf[16];
-	int		hexlen;
+	t_vars	vars;
+	char	buf[16];
 	int		prefixlen;
-	int		zeros;
-	int		contentlen;
 
-	count = 0;
-	ret = 0;
-	hexlen = ft_utoa_hex(num, hex_buf, low);
+	vars.count = 0;
 	prefixlen = 0;
-	zeros = 0;
+	vars.zeros = 0;
+	vars.len = ft_utoa_hex(num, buf, low);
 	if (flags.precision == 0 && num == 0)
-		hexlen = 0;
+		vars.len = 0;
 	if (flags.alt_form && num != 0)
 		prefixlen = 2;
-	if (flags.precision_set && flags.precision > hexlen)
-		zeros = flags.precision - hexlen;
-	contentlen = prefixlen + zeros + hexlen;
-	if (prefixlen > 0 && (flags.zero_pad || flags.left_align))
-	{
-		ret = ft_putprefix(low);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
-	if (flags.left_align)
-	{
-		if (zeros > 0)
-		{
-			ret = ft_putnchar('0', zeros);
-			if (ret == -1)
-				return (-1);
-			count += ret;
-		}
-		ret = ft_putbuf(hex_buf, hexlen);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
-	ret = ft_putpad(flags.width, contentlen, flags.zero_pad);
-	if (ret == -1)
-		return (-1);
-	count += ret;
-	if (prefixlen > 0 && !flags.zero_pad && !flags.left_align)
-	{
-		ret = ft_putprefix(low);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
-	if (!flags.left_align)
-	{
-		if (zeros > 0)
-		{
-			ret = ft_putnchar('0', zeros);
-			if (ret == -1)
-				return (-1);
-			count += ret;
-		}
-		ret = ft_putbuf(hex_buf, hexlen);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
-	return (count);
+	if (flags.precision_set && flags.precision > vars.len)
+		vars.zeros = flags.precision - vars.len;
+	vars.contentlen = prefixlen + vars.zeros + vars.len;
+	vars.count = ft_puthex_content(flags, vars, buf, prefixlen, low);
+	return (vars.count);
 }

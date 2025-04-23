@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 02:10:06 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 02:10:17 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/23 20:22:34 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,29 @@
 
 int	print_str(const char *str, t_flags flags)
 {
-	int	count;
-	int	ret;
-	int	strlen;
-	int	printlen;
+	t_vars v;
 
-	count = 0;
-	ret = 0;
+	v.count = 0;
 	if (!str)
 		str = "(null)";
-	strlen = ft_strlen(str);
-	printlen = strlen;
-	if (flags.precision_set && flags.precision < printlen)
-		printlen = flags.precision;
+	v.len = ft_strlen(str);
+	v.contentlen = v.len;
+	if (flags.precision_set && flags.precision < v.contentlen)
+		v.contentlen = flags.precision;
 	if (flags.left_align)
 	{
-		ret = ft_putnstr(str, printlen);
-		if (ret == -1)
+		v.ret = ft_putnstr(str, v.contentlen);
+		if (!safe_count(v.ret, &v.count))
 			return (-1);
-		count += ret;
 	}
-	ret = ft_putpad(flags.width, printlen, 0);
-	if (ret == -1)
+	v.ret = ft_putpad(flags.width, v.contentlen, 0);
+	if (!safe_count(v.ret, &v.count))
 		return (-1);
-	count += ret;
 	if (!flags.left_align)
 	{
-		ret = ft_putnstr(str, printlen);
-		if (ret == -1)
+		v.ret = ft_putnstr(str, v.contentlen);
+		if (!safe_count(v.ret, &v.count))
 			return (-1);
-		count += ret;
 	}
-	return (count);
+	return (v.count);
 }

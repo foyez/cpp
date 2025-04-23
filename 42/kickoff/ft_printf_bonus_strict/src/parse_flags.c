@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 01:39:21 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 01:42:08 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/23 02:55:09 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,10 @@ const char	*parse_flags(const char *fmt, t_flags *flags)
 	fmt = ft_parse_num(fmt, &flags->width);
 	if (*fmt == '.')
 	{
-		fmt++;
 		flags->precision_set = 1;
 		flags->precision = 0;
 		flags->zero_pad = 0;
-		fmt = ft_parse_num(fmt, &flags->precision);
+		fmt = ft_parse_num(++fmt, &flags->precision);
 	}
 	return (fmt);
 }

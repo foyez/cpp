@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 02:14:48 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 02:17:18 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/23 22:49:07 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,76 +43,60 @@ static int	ft_put_sign(int is_negative, t_flags flags)
 	return (0);
 }
 
+static int	ft_putnbr_content(t_flags f, t_vars v, char *buf, int is_neg)
+{
+	if (f.zero_pad || f.left_align)
+	{
+		v.ret = ft_put_sign(is_neg, f);
+		if (!safe_count(v.ret, &v.count))
+			return (-1);
+	}
+	if (f.left_align)
+	{
+		v.ret = ft_putbuf(buf, v.len, v.zeros);
+		if (!safe_count(v.ret, &v.count))
+			return (-1);
+	}
+	v.ret = ft_putpad(f.width, v.contentlen, f.zero_pad);
+	if (!safe_count(v.ret, &v.count))
+		return (-1);
+	if (!f.zero_pad && !f.left_align)
+	{
+		v.ret = ft_put_sign(is_neg, f);
+		if (!safe_count(v.ret, &v.count))
+			return (-1);
+	}
+	if (!f.left_align)
+	{
+		v.ret = ft_putbuf(buf, v.len, v.zeros);
+		if (!safe_count(v.ret, &v.count))
+			return (-1);
+	}
+	return (v.count);
+}
+
 // Effect: -, 0, ., +, and space
 // No effect: #
 int	print_nbr(int n, t_flags flags)
 {
-	int		count;
+	t_vars  vars;
 	char	buf[16];
 	int		is_negative;
-	int		len;
-	int		zeros;
-	int		ret;
 	int		extra_char;
 
-	count = 0;
+	vars.count = 0;
 	is_negative = n < 0;
-	len = ft_itoa_base10(n, buf);
-	zeros = 0;
-	ret = 0;
+	vars.len = ft_itoa_base10(n, buf);
+	vars.zeros = 0;
+	vars.ret = 0;
 	if (flags.precision == 0 && n == 0)
-		len = 0;
+		vars.len = 0;
 	extra_char = 0;
 	if (is_negative || flags.plus_sign || flags.space)
 		extra_char = 1;
-	if (flags.precision_set && flags.precision > len)
-		zeros = flags.precision - len;
-	int contentlen = len + zeros + extra_char;
-	if (flags.zero_pad || flags.left_align)
-	{
-		ret = ft_put_sign(is_negative, flags);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
-	if (flags.left_align)
-	{
-		if (zeros > 0)
-		{
-			ret = ft_putnchar('0', zeros);
-			if (ret == -1)
-				return (-1);
-			count += ret;
-		}
-		ret = ft_putbuf(buf, len);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
-	ret = ft_putpad(flags.width, contentlen, flags.zero_pad);
-	if (ret == -1)
-		return (-1);
-	count += ret;
-	if (!flags.zero_pad && !flags.left_align)
-	{
-		ret = ft_put_sign(is_negative, flags);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
-	if (!flags.left_align)
-	{
-		if (zeros > 0)
-		{
-			ret = ft_putnchar('0', zeros);
-			if (ret == -1)
-				return (-1);
-			count += ret;
-		}
-		ret = ft_putbuf(buf, len);
-		if (ret == -1)
-			return (-1);
-		count += ret;
-	}
-	return (count);
+	if (flags.precision_set && flags.precision > vars.len)
+		vars.zeros = flags.precision - vars.len;
+	vars.contentlen = vars.len + vars.zeros + extra_char;
+	vars.count = ft_putnbr_content(flags, vars, buf, is_negative);
+	return (vars.count);
 }

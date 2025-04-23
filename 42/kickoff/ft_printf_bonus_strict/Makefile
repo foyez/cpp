@@ -6,7 +6,7 @@
 #    By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/19 21:57:58 by kaahmed           #+#    #+#              #
-#    Updated: 2025/04/23 02:47:22 by kaahmed          ###   ########.fr        #
+#    Updated: 2025/04/23 19:51:41 by kaahmed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ NORM_FLAGS = -R CheckForbiddenSourceHeader -R CheckDefine
 SRC_FILES = $(SRC_DIR)/ft_printf.c $(SRC_DIR)/parse_flags.c $(SRC_DIR)/handle_format.c \
 						$(SRC_DIR)/print_char.c $(SRC_DIR)/print_str.c $(SRC_DIR)/print_ptr.c \
 						$(SRC_DIR)/print_nbr.c $(SRC_DIR)/print_unsigned.c $(SRC_DIR)/print_hex.c \
-						$(SRC_DIR)/utils.c
+						$(SRC_DIR)/ft_put_utils.c $(SRC_DIR)/utils.c
 HEADER_FILES = $(INC_DIR)/ft_printf.h
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 02:11:40 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 02:13:13 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/23 20:49:37 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,20 +65,17 @@ int	print_ptr(unsigned long ptr, t_flags flags)
 	if (flags.left_align)
 	{
 		ret = ft_putptr(hex_buf, hexlen);
-		if (ret == -1)
+		if (!safe_count(ret, &count))
 			return (-1);
-		count += ret;
 	}
 	ret = ft_putpad(flags.width, printlen, 0);
-	if (ret == -1)
+	if (!safe_count(ret, &count))
 		return (-1);
-	count += ret;
 	if (!flags.left_align)
 	{
 		ret = ft_putptr(hex_buf, hexlen);
-		if (ret == -1)
+		if (!safe_count(ret, &count))
 			return (-1);
-		count += ret;
 	}
 	return (count);
 }
