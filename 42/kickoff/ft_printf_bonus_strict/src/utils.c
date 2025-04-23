@@ -6,7 +6,79 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 00:45:08 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/22 00:45:21 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/23 02:16:22 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
+
+int	ft_putchar(char c)
+{
+	return (write(1, &c, 1));
+}
+
+int	ft_putnchar(char c, int n)
+{
+	char	buf[1024];
+	int		ret;
+	int		count;
+	int		i;
+	int		chunk;
+
+	count = 0;
+	if (n <= 0)
+		return (0);
+	i = 0;
+	while (i < 1024)
+		buf[i++] = c;
+	chunk = 1024;
+	while (n > 0)
+	{
+		if (n < 1024)
+			chunk = n;
+		ret = write(1, buf, chunk);
+		if (ret != chunk)
+			return (-1);
+		count += ret;
+		n -= chunk;
+	}
+	return (count);
+}
+
+int	ft_putnstr(const char *s, int n)
+{
+	int	ret;
+
+	if (!s)
+		s = "(null)";
+	ret = write(1, s, n);
+	if (ret != n)
+		return (-1);
+	return (ret);
+}
+
+int	ft_putpad(int width, int contentlen, int zero_pad)
+{
+	char	pad_ch;
+	int		padlen;
+
+	pad_ch = ' ';
+	padlen = 0;
+	if (width > contentlen)
+		padlen = width - contentlen;
+	if (zero_pad)
+		pad_ch = '0';
+	return (ft_putnchar(pad_ch, padlen));
+}
+
+int	ft_putbuf(char *buf, int len)
+{
+	int count = 0;
+	while (--len >= 0)
+	{
+		if (ft_putchar(buf[len]) == -1)
+			return (-1);
+		count++;
+	}
+	return (count);
+}
