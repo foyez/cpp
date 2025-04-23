@@ -6,7 +6,7 @@
 #    By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/19 21:57:58 by kaahmed           #+#    #+#              #
-#    Updated: 2025/04/23 02:21:45 by kaahmed          ###   ########.fr        #
+#    Updated: 2025/04/23 02:47:22 by kaahmed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ OBJ_DIR = obj
 LIBFT_DIR = libft
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I $(INC_DIR)
+CFLAGS = -Wall -Wextra -Werror -g -I $(INC_DIR)
 
 NORM = norminette
 NORM_FLAGS = -R CheckForbiddenSourceHeader -R CheckDefine
@@ -40,7 +40,7 @@ $(NAME): $(NAME_LIBFT) $(OBJ_FILES) $(HEADER_FILES)
 	ar rcs $(NAME) $(OBJ_FILES)
 
 $(NAME_LIBFT):
-	make -C $(LIBFT_DIR)
+	$(MAKE) -C $(LIBFT_DIR)
 	cp $(LIBFT_DIR)/$(NAME_LIBFT) .
 	mv $(NAME_LIBFT) $(NAME)
 
@@ -59,13 +59,19 @@ fclean: clean
 
 re: fclean all
 
-testlib: $(NAME)
-	@echo "Compiling and running..."
-	$(CC) -I $(INC_DIR) -Wno-format tests/testlib.c -L. -lftprintf -o myprogram.out
-	./myprogram.out
-
 norm:
 	@echo "Running norminette..."
 	$(NORM) $(NORM_FLAGS) $(SRC_FILES) $(HEADER_FILES)
 
-.PHONY: all clean fclean re testlib test norm
+testlib: $(NAME)
+	@echo "Compiling and running..."
+	$(CC) -I $(INC_DIR) tests/test_main.c -L. -lftprintf -o test_main.out
+	./test_main.out
+	
+debug: fclean
+	$(MAKE) all
+	@echo "Running debugging using lldb"
+	$(CC) -I $(INC_DIR) -g tests/test_main.c -L. -lftprintf -o test_main.out
+	lldb ./test_main.out
+
+.PHONY: all clean fclean re testlib test norm debug
