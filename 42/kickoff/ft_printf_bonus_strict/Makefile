@@ -6,7 +6,7 @@
 #    By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/19 21:57:58 by kaahmed           #+#    #+#              #
-#    Updated: 2025/04/23 19:51:41 by kaahmed          ###   ########.fr        #
+#    Updated: 2025/04/23 23:28:08 by kaahmed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ LIBFT_DIR = libft
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -I $(INC_DIR)
+VALGRIND_ARGS = --leak-check=full --show-leak-kinds=all --track-origins=yes -s
 
 NORM = norminette
 NORM_FLAGS = -R CheckForbiddenSourceHeader -R CheckDefine
@@ -63,9 +64,11 @@ norm:
 	@echo "Running norminette..."
 	$(NORM) $(NORM_FLAGS) $(SRC_FILES) $(HEADER_FILES)
 
-testlib: $(NAME)
-	@echo "Compiling and running..."
+build: $(NAME)
 	$(CC) -I $(INC_DIR) tests/test_main.c -L. -lftprintf -o test_main.out
+	
+run: build
+	@echo "Running the app..."
 	./test_main.out
 	
 debug: fclean
@@ -74,4 +77,17 @@ debug: fclean
 	$(CC) -I $(INC_DIR) -g tests/test_main.c -L. -lftprintf -o test_main.out
 	lldb ./test_main.out
 
-.PHONY: all clean fclean re testlib test norm debug
+valgrind:
+	@echo "Running valgrind..."
+	@docker run -it --rm \
+	-v $(shell pwd):/valgrind \
+	-w /valgrind \
+	--name valgrind \
+	valgrind:1.0 \
+	sh -c '\
+		make -s fclean && \
+		make -s build && \
+		valgrind $(VALGRIND_ARGS) ./test_main.out \
+	'
+
+.PHONY: all clean fclean re norm build run debug valgrind
