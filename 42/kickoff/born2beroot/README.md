@@ -169,6 +169,8 @@ The `cmd` key on your keyboard will help you switch the capture of your mouse fr
 
 **WARNING:** When switching between the VM and your system, pay attention to changing uppercase to lowercase or vice versa. This could be a common mistake that might cause issues with password input, as the VM will retain the previous state.
 
+**Note:** To release the mouse cursor from VirtualBox on macOS, press `ctrl` + `option` + `command`.
+
 1. **Choose the Version Without a Graphical Interface**
 
    Select `Install` (this is a mandatory part of the project).
@@ -601,8 +603,6 @@ cat /etc/os-release
 	```bash
 	dpkg -l | grep sudo
 	```
-
-	To release the mouse cursor from VirtualBox on macOS, press `ctrl` + `option` + `command`
 
 2. **Add User to Sudo and user42 Groups**
 
