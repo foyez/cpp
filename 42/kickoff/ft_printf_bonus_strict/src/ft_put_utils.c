@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 19:50:49 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 20:48:09 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/24 18:35:36 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ int	ft_putpad(int width, int contentlen, int zero_pad)
 
 int	ft_putbuf(char *buf, int len, int zeros)
 {
-	int ret;
-	int count;
+	int	ret;
+	int	count;
 
 	count = 0;
 	if (zeros > 0)

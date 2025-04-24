@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 02:18:35 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 20:47:42 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/24 18:42:55 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	ft_utoa_hex(unsigned int num, char *buf, int low)
 {
 	char	*hex;
-	int			i;
+	int		i;
 
 	hex = "0123456789abcdef";
 	if (!low)
@@ -33,8 +33,8 @@ static int	ft_utoa_hex(unsigned int num, char *buf, int low)
 
 static int	ft_putprefix_if(int prefixlen, int low)
 {
-	int	ret;
-	char *prefix_str;
+	int		ret;
+	char	*prefix_str;
 
 	if (prefixlen == 0)
 		return (0);
@@ -47,7 +47,8 @@ static int	ft_putprefix_if(int prefixlen, int low)
 	return (ret);
 }
 
-static int	ft_puthex_content(t_flags f, t_vars v, char *buf, int p_len, int low)
+static int	ft_puthex_content(t_flags f, t_vars v, char *buf, int p_len,
+		int low)
 {
 	if (f.zero_pad || f.left_align)
 	{
@@ -63,7 +64,7 @@ static int	ft_puthex_content(t_flags f, t_vars v, char *buf, int p_len, int low)
 	}
 	v.ret = ft_putpad(f.width, v.contentlen, f.zero_pad);
 	if (!safe_count(v.ret, &v.count))
-			return (-1);
+		return (-1);
 	if (!f.zero_pad && !f.left_align)
 	{
 		v.ret = ft_putprefix_if(p_len, low);

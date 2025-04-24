@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 20:16:00 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 20:43:30 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/24 18:41:00 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@
 
 typedef struct s_flags
 {
-	int				left_align;
-	int				width;
-	int				precision;
-	int				precision_set;
-	int				zero_pad;
-	int				plus_sign;
-	int				space;
-	int				alt_form;
-}					t_flags;
+	int		left_align;
+	int		width;
+	int		precision;
+	int		precision_set;
+	int		zero_pad;
+	int		plus_sign;
+	int		space;
+	int		alt_form;
+}			t_flags;
 
 typedef struct s_vars
 {
@@ -35,7 +35,7 @@ typedef struct s_vars
 	int		len;
 	int		zeros;
 	int		contentlen;
-}	t_vars;
+}			t_vars;
 
 int			ft_printf(const char *str, ...);
 const char	*parse_flags(const char *format, t_flags *flags);

@@ -6,7 +6,7 @@
 #    By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/19 21:57:58 by kaahmed           #+#    #+#              #
-#    Updated: 2025/04/23 23:51:50 by kaahmed          ###   ########.fr        #
+#    Updated: 2025/04/24 18:47:52 by kaahmed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,7 @@ clean:
 	make clean -C $(LIBFT_DIR)
 
 fclean: clean
-	rm -f $(NAME) $(BINARY)
+	rm -rf $(NAME) $(BINARY) $(BINARY).dSYM
 	make fclean -C $(LIBFT_DIR)
 
 re: fclean all

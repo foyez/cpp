@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 02:10:06 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 20:22:34 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/24 18:43:17 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	print_str(const char *str, t_flags flags)
 {
-	t_vars v;
+	t_vars	v;
 
 	v.count = 0;
 	if (!str)

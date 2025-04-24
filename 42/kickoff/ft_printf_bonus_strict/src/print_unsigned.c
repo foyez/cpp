@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 01:54:42 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 21:27:17 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/24 18:43:21 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	ft_utoa(unsigned int n, char *buf)
 
 int	print_unsigned(unsigned int n, t_flags flags)
 {
-	t_vars vars;
+	t_vars	vars;
 	char	buf[16];
 
 	vars.count = 0;
@@ -42,7 +42,8 @@ int	print_unsigned(unsigned int n, t_flags flags)
 		vars.zeros = flags.precision - vars.len;
 	if (!flags.left_align)
 	{
-		vars.ret = ft_putpad(flags.width, vars.len + vars.zeros, flags.zero_pad);
+		vars.ret = ft_putpad(flags.width, vars.len + vars.zeros,
+				flags.zero_pad);
 		if (!safe_count(vars.ret, &vars.count))
 			return (-1);
 	}

@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 02:14:48 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/23 22:49:07 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/24 18:43:04 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static int	ft_putnbr_content(t_flags f, t_vars v, char *buf, int is_neg)
 // No effect: #
 int	print_nbr(int n, t_flags flags)
 {
-	t_vars  vars;
+	t_vars	vars;
 	char	buf[16];
 	int		is_negative;
 	int		extra_char;
