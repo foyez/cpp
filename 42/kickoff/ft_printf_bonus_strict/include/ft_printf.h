@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 20:16:00 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/24 18:41:00 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/25 01:37:23 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@ typedef struct s_vars
 	int		zeros;
 	int		contentlen;
 }			t_vars;
+
+typedef struct s_hex_args
+{
+	int		low;
+	int		prefixlen
+}			t_hex_args;
 
 int			ft_printf(const char *str, ...);
 const char	*parse_flags(const char *format, t_flags *flags);

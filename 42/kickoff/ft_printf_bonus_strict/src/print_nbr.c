@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 02:14:48 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/24 18:43:04 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/25 01:12:55 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,28 @@ static int	ft_put_sign(int is_negative, t_flags flags)
 	return (0);
 }
 
-static int	ft_putnbr_content(t_flags f, t_vars v, char *buf, int is_neg)
+static int	ft_put_left_align(t_flags f, t_vars *v, char *buf, int is_neg)
 {
 	if (f.zero_pad || f.left_align)
 	{
-		v.ret = ft_put_sign(is_neg, f);
-		if (!safe_count(v.ret, &v.count))
+		v->ret = ft_put_sign(is_neg, f);
+		if (!safe_count(v->ret, &v->count))
 			return (-1);
 	}
 	if (f.left_align)
 	{
-		v.ret = ft_putbuf(buf, v.len, v.zeros);
-		if (!safe_count(v.ret, &v.count))
+		v->ret = ft_putbuf(buf, v->len, v->zeros);
+		if (!safe_count(v->ret, &v->count))
 			return (-1);
 	}
+	return (0);
+}
+
+static int	ft_putnbr_content(t_flags f, t_vars v, char *buf, int is_neg)
+{
+	v.ret = ft_put_left_align(f, &v, buf, is_neg);
+	if (v.ret == -1)
+		return (-1);
 	v.ret = ft_putpad(f.width, v.contentlen, f.zero_pad);
 	if (!safe_count(v.ret, &v.count))
 		return (-1);

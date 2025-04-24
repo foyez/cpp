@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 01:54:42 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/24 18:43:21 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/25 00:56:47 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,24 @@ static int	ft_utoa(unsigned int n, char *buf)
 	return (i);
 }
 
+void	init_vars(t_vars *v, t_flags *f, unsigned int n, char *buf)
+{
+	v->count = 0;
+	v->len = ft_utoa(n, buf);
+	v->ret = 0;
+	v->zeros = 0;
+	if (f->precision == 0 && n == 0)
+		v->len = 0;
+	if (f->precision_set && f->precision > v->len)
+		v->zeros = f->precision - v->len;
+}
+
 int	print_unsigned(unsigned int n, t_flags flags)
 {
 	t_vars	vars;
 	char	buf[16];
 
-	vars.count = 0;
-	vars.len = ft_utoa(n, buf);
-	vars.ret = 0;
-	vars.zeros = 0;
-	if (flags.precision == 0 && n == 0)
-		vars.len = 0;
-	if (flags.precision_set && flags.precision > vars.len)
-		vars.zeros = flags.precision - vars.len;
+	init_vars(&vars, &flags, n, buf);
 	if (!flags.left_align)
 	{
 		vars.ret = ft_putpad(flags.width, vars.len + vars.zeros,

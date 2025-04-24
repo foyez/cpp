@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 02:11:40 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/24 18:43:12 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/25 01:17:43 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,30 +52,27 @@ int	ft_putptr(char *buf, int len)
 
 int	print_ptr(unsigned long ptr, t_flags flags)
 {
-	int		count;
-	int		ret;
+	t_vars	vars;
 	char	hex_buf[32];
-	int		hexlen;
-	int		printlen;
 
-	count = 0;
-	ret = 0;
-	hexlen = ft_utoa_ptr(ptr, hex_buf);
-	printlen = 2 + hexlen;
+	vars.count = 0;
+	vars.ret = 0;
+	vars.len = ft_utoa_ptr(ptr, hex_buf);
+	vars.contentlen = 2 + vars.len;
 	if (flags.left_align)
 	{
-		ret = ft_putptr(hex_buf, hexlen);
-		if (!safe_count(ret, &count))
+		vars.ret = ft_putptr(hex_buf, vars.len);
+		if (!safe_count(vars.ret, &vars.count))
 			return (-1);
 	}
-	ret = ft_putpad(flags.width, printlen, 0);
-	if (!safe_count(ret, &count))
+	vars.ret = ft_putpad(flags.width, vars.contentlen, 0);
+	if (!safe_count(vars.ret, &vars.count))
 		return (-1);
 	if (!flags.left_align)
 	{
-		ret = ft_putptr(hex_buf, hexlen);
-		if (!safe_count(ret, &count))
+		vars.ret = ft_putptr(hex_buf, vars.len);
+		if (!safe_count(vars.ret, &vars.count))
 			return (-1);
 	}
-	return (count);
+	return (vars.count);
 }

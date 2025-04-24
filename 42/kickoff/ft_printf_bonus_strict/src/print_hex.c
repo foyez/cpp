@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/23 02:18:35 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/04/24 18:42:55 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/04/25 01:30:46 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,27 +47,34 @@ static int	ft_putprefix_if(int prefixlen, int low)
 	return (ret);
 }
 
-static int	ft_puthex_content(t_flags f, t_vars v, char *buf, int p_len,
-		int low)
+static int	ft_put_left_align(t_flags f, t_vars *v, char *buf, t_hex_args args)
 {
 	if (f.zero_pad || f.left_align)
 	{
-		v.ret = ft_putprefix_if(p_len, low);
-		if (!safe_count(v.ret, &v.count))
+		v->ret = ft_putprefix_if(args.prefixlen, args.low);
+		if (!safe_count(v->ret, &v->count))
 			return (-1);
 	}
 	if (f.left_align)
 	{
-		v.ret = ft_putbuf(buf, v.len, v.zeros);
-		if (!safe_count(v.ret, &v.count))
+		v->ret = ft_putbuf(buf, v->len, v->zeros);
+		if (!safe_count(v->ret, &v->count))
 			return (-1);
 	}
+	return (0);
+}
+
+static int	ft_puthex(t_flags f, t_vars v, char *buf, t_hex_args args)
+{
+	v.ret = ft_put_left_align(f, &v, buf, args);
+	if (v.ret == -1)
+		return (-1);
 	v.ret = ft_putpad(f.width, v.contentlen, f.zero_pad);
 	if (!safe_count(v.ret, &v.count))
 		return (-1);
 	if (!f.zero_pad && !f.left_align)
 	{
-		v.ret = ft_putprefix_if(p_len, low);
+		v.ret = ft_putprefix_if(args.prefixlen, args.low);
 		if (!safe_count(v.ret, &v.count))
 			return (-1);
 	}
@@ -84,9 +91,10 @@ static int	ft_puthex_content(t_flags f, t_vars v, char *buf, int p_len,
 // No Effect: + and space
 int	print_hex(unsigned int num, t_flags flags, int low)
 {
-	t_vars	vars;
-	char	buf[16];
-	int		prefixlen;
+	t_vars		vars;
+	t_hex_args	args;
+	char		buf[16];
+	int			prefixlen;
 
 	vars.count = 0;
 	prefixlen = 0;
@@ -99,6 +107,8 @@ int	print_hex(unsigned int num, t_flags flags, int low)
 	if (flags.precision_set && flags.precision > vars.len)
 		vars.zeros = flags.precision - vars.len;
 	vars.contentlen = prefixlen + vars.zeros + vars.len;
-	vars.count = ft_puthex_content(flags, vars, buf, prefixlen, low);
+	args.low = low;
+	args.prefixlen = prefixlen;
+	vars.count = ft_puthex(flags, vars, buf, args);
 	return (vars.count);
 }
