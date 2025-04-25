@@ -1,13 +1,10 @@
 <p align="center">
 	<b><i>"BORN2BEROOT is a project that immerses students in system administration, focusing on system and network basics, server services, and strict access policies."</i></b><br>
+	This repository is an extended version of a project originally written by someone else. Feel free to check out the <a href="https://github.com/f-corvaro/42.common_core/tree/main/01-born2beroot">original repository</a>.
 </p>
 
 <p align="justify">
 
-<p align="center">
-  <a href="https://github.com/f-corvaro/42.common_core/tree/main/01-born2beroot"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/f-corvaro/42.common_core?color=yellow" /></a>
-  </a>
-</p>
 <h3 align="center">Index</h3>
 
 <p align="center">
