@@ -9,12 +9,12 @@ void	print_bits(unsigned char octet)
 	bit = 0;
 	while (i--)
 	{
-		// if i == 8
-		// Start: 0000 0011 (3)
-		// Shift 1: 0000 0001
-		// Shift 2: 0000 0000
-		// Shift 3-8: 0000 0000
-		// (0 & 1) = 0
+		// if i == 8 and octet == 5
+		// if i = 8, (5 >> 8) & 1 => (00000101 >> 8) & 1 => 00000000 & 00000001 => 0
+		// ...
+		// if i = 2, (5 >> 2) & 1 => (00000101 >> 2) & 1 => 00000001 & 00000001 => 1
+		// if i = 1, (5 >> 1) & 1 => (00000101 >> 1) & 1 => 00000010 & 00000001 => 0
+		// if i = 0, (5 >> 0) & 1 => (00000101 >> 0) & 1 => 00000101 & 00000001 => 1
 		bit = (octet >> i & 1) + '0';
 		write(1, &bit, 1);
 	}
@@ -37,8 +37,8 @@ void	print_bits(unsigned char octet)
 	Never shift by a value ≥ the number of bits in the type.
 */
 /*
-	(3 >> 1) & 1 => (00000011 >> 1) => 00000001 & 1 => 1 & 1 => 1
-	(3 >> 1) && 1 => (00000011 >> 1) => 00000001 && 1 => 1 && 1 => true => 1
+	(3 >> 1) & 1 => (00000011 >> 1) & 1 => 00000001 & 1 => 00000001 => 1
+	(3 >> 1) && 1 => (00000011 >> 1) & 1 => 00000001 && 1 => true => 1
 */
 /*
 	Usecase of & (bitwise AND) and && (logical AND):
@@ -55,7 +55,7 @@ int	main(void)
 {
 	unsigned char	octet;
 
-	octet = 3;
+	octet = 5;
 	print_bits(octet);
 	return (0);
 }
