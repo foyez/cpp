@@ -1514,7 +1514,7 @@ sudo chmod -x monitoring.sh
    Use the following command to create a database:
 
    ```sql
-   CREATE DATABASE wp_db;
+   CREATE DATABASE wp_database;
    ```
 
 	<img width="650" src="https://github.com/f-corvaro/42.common_core/blob/main/01-born2beroot/.extra/114.png">
