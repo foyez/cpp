@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: oishchen <oishchen@student.42heilbronn.    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/04/16 19:52:14 by oishchen          #+#    #+#              #
-#    Updated: 2025/04/20 15:16:02 by oishchen         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 #Declaration: pass to the headers
 MIX_HEADERS = $(MIX_LIB_NAME)/printf/includes/ $(MIX_LIB_NAME)/libft/includes/
 OWN_HEADER = include/
