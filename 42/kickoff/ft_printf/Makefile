@@ -4,7 +4,7 @@ SRC_DIR = src
 INC_DIR = include
 OBJ_DIR = obj
 LIBFT_NAME = libft.a
-LIBFT_DIR = $(abspath ../libft)
+LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/$(LIBFT_NAME)
 
 CC = cc
