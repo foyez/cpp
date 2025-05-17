@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:15:22 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/03/18 16:41:58 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/05/17 23:45:09 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,32 +71,31 @@ static void	ft_free_split(char **arr, int i)
 /// the character ’c’ as a delimiter. The array must
 /// end with a NULL pointer.
 /// @param s
-/// @param c
+/// @param delim
 /// @return The array of new strings resulting from the split.
 /// NULL if the allocation fails.
-char	**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char delim)
 {
-	int		size;
+	int		wordlen;
 	char	**arr;
 	int		i;
 
-	size = ft_word_count(s, c);
-	arr = (char **)malloc(sizeof(char *) * (size + 1));
+	arr = (char **)malloc(sizeof(char *) * (ft_word_count(s, delim) + 1));
 	if (!arr)
 		return (NULL);
 	i = 0;
 	while (*s)
 	{
-		while (*s && *s == c)
-			s++;
-		if (*s)
+		if (*s != delim)
 		{
-			arr[i] = ft_allocate_word(s, c);
+			wordlen = ft_wordlen(s, delim);
+			arr[i] = ft_allocate_word(s, delim);
 			if (!arr[i])
 				return (ft_free_split(arr, i - 1), NULL);
 			i++;
+			s += wordlen;
 		}
-		while (*s && *s != c)
+		else
 			s++;
 	}
 	arr[i] = NULL;

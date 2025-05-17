@@ -38,6 +38,7 @@ $(NAME): $(OBJ_FILES)
 
 $(BONUS_NAME): $(OBJ_FILES) $(OBJ_BONUS_FILES)
 	ar rcs $(BONUS_NAME) $(OBJ_FILES) $(OBJ_BONUS_FILES)
+	@cp $(BONUS_NAME) $(NAME)
 
 all: $(NAME)
 
