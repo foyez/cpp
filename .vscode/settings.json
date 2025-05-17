@@ -4,6 +4,7 @@
     "utils.h": "c",
     "__locale": "c",
     "ios": "c",
-    "printf.h": "c"
+    "printf.h": "c",
+    "error.h": "c"
   }
 }

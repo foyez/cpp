@@ -1,0 +1,5 @@
+fopen failed: No such file or directory
+[0;32m[INFO] [0mApp started with PID 35673
+[0;31m[ERROR][0m open: No such file or directory
+[0;33m[WARN] [0mThis is just a test warning.
+[0;32m[INFO] [0mShutting down cleanly.

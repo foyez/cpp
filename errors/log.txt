@@ -1,0 +1,12 @@
+[INFO] App started with PID 35673
+[ERROR] open: No such file or directory
+[WARN] This is just a test warning.
+[INFO] Shutting down cleanly.
+[INFO] App started with PID 35978
+[ERROR] open: No such file or directory
+[WARN] This is just a test warning.
+[INFO] Shutting down cleanly.
+[INFO] [2025-05-17 13:58:32] App started with PID 36818
+[ERROR] [2025-05-17 13:58:32] open: No such file or directory
+[WARN] [2025-05-17 13:58:32] This is just a test warning.
+[INFO] [2025-05-17 13:58:32] Shutting down cleanly.
