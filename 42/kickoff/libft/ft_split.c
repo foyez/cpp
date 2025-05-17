@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 13:15:22 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/05/17 23:45:09 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/05/18 01:04:53 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,11 @@ static int	ft_wordlen(char const *s, char del)
 	return (len);
 }
 
-static char	*ft_allocate_word(char const *s, char del)
+static char	*ft_allocate_word(char const *s, int len)
 {
 	char	*word;
-	int		len;
 	int		i;
 
-	len = ft_wordlen(s, del);
 	word = (char *)malloc(sizeof(char) * (len + 1));
 	if (!word)
 		return (NULL);
@@ -89,7 +87,7 @@ char	**ft_split(char const *s, char delim)
 		if (*s != delim)
 		{
 			wordlen = ft_wordlen(s, delim);
-			arr[i] = ft_allocate_word(s, delim);
+			arr[i] = ft_allocate_word(s, wordlen);
 			if (!arr[i])
 				return (ft_free_split(arr, i - 1), NULL);
 			i++;
