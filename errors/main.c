@@ -34,6 +34,7 @@ int main(void)
         log_error("open");
     log_warn("This is just a test warning.");
     log_info("Shutting down cleanly.");
+    log_debug("Value of fd: %d", fd);
     close_log_file();
 
 	return (0);

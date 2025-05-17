@@ -10,3 +10,16 @@
 [ERROR] [2025-05-17 13:58:32] open: No such file or directory
 [WARN] [2025-05-17 13:58:32] This is just a test warning.
 [INFO] [2025-05-17 13:58:32] Shutting down cleanly.
+[INFO] [2025-05-17 14:04:04.009][PID:39031] App started with PID 39031
+[ERROR] [2025-05-17 14:04:04.010][PID:39031] open: No such file or directory
+[WARN] [2025-05-17 14:04:04.010][PID:39031] This is just a test warning.
+[INFO] [2025-05-17 14:04:04.010][PID:39031] Shutting down cleanly.
+[INFO] [2025-05-17 14:04:39.731][PID:39271] App started with PID 39271
+[ERROR] [2025-05-17 14:04:39.732][PID:39271] open: No such file or directory
+[WARN] [2025-05-17 14:04:39.732][PID:39271] This is just a test warning.
+[INFO] [2025-05-17 14:04:39.732][PID:39271] Shutting down cleanly.
+[INFO] [2025-05-17 14:05:28.318][PID:39566] App started with PID 39566
+[ERROR] [2025-05-17 14:05:28.319][PID:39566] open: No such file or directory
+[WARN] [2025-05-17 14:05:28.319][PID:39566] This is just a test warning.
+[INFO] [2025-05-17 14:05:28.319][PID:39566] Shutting down cleanly.
+[DEBUG] [2025-05-17 14:05:28.319][PID:39566] Value of fd: -1
