@@ -6,7 +6,7 @@ ENV ZSH_CUSTOM="$ZSH/custom"
 
 RUN apk update && apk add --no-cache \
     valgrind \
-    g++ make \
+    gcc g++ make \
     lsof \
     vim git zsh curl && \
     # Install Oh My Zsh unattended
