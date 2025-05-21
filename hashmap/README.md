@@ -4,6 +4,21 @@ In C, there's no built-in hash map like in JavaScript ({}) or Python (dict), but
 
 ---
 
+One of the best approaches to mimic a hash map in C:
+
+## 1. **Static arrays (for small, fixed key domains like ASCII)**
+
+Great for problems like character frequency/counting.
+
+```c
+int freq[256] = {0};  // Keys: ASCII codes (0–255), Values: counts or flags
+freq['a']++;          // Increment count for character 'a'
+```
+
+✔️ _Best for: character lookups, flags, simple mappings with small key ranges._
+
+---
+
 ### 🔹 1. **ASCII character frequency (all 256 ASCII values)**
 
 ```c
@@ -121,5 +136,3 @@ printf("Are anagrams: %s\n", is_anagram ? "yes" : "no");
 ✔️ Use when: Comparing character distributions efficiently.
 
 ---
-
-Let me know if you want a printable cheatsheet or want to add Unicode support or hashing for string keys!
