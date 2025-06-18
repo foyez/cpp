@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:57:53 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/06/18 02:28:01 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/06/18 03:04:03 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,17 @@ int	ft_vdprintf(int fd, const char *format, va_list args)
 		count += ret;
 		format++;
 	}
+	return (count);
+}
+
+int	ft_fprintf(int fd, const char *format, ...)
+{
+	va_list	args;
+	int		count;
+
+	va_start(args, format);
+	count = ft_vdprintf(fd, format, args);
+	va_end(args);
 	return (count);
 }
 
