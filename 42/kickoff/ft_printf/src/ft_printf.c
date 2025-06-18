@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:57:53 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/05/16 16:21:03 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/06/18 02:28:01 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_vdprintf(int fd, const char *format, va_list args)
 		{
 			format++;
 			format = parse_flags(format, &flags);
-			ret = handle_format(fd, *format, args, flags);
+			ret = handle_format(fd, *format, &args, flags);
 		}
 		else
 			ret = ft_putchar(fd, *format);
