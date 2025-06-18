@@ -66,7 +66,7 @@ int handle_format(int fd, char c, va_list *args)
 		return (print_num(fd, va_arg(*args, int)));
 	if (c == 'x')
 		return (print_hex(fd, va_arg(*args, unsigned int)));
-	return (-1);
+	return ft_putchar(fd, c);
 }
 
 int ft_vdprintf(int fd, const char *format, va_list args)
@@ -85,7 +85,7 @@ int ft_vdprintf(int fd, const char *format, va_list args)
 		else
 			ret = ft_putchar(fd, *format);
 		if (ret == -1)
-			return (va_end(args), -1);
+			return (-1);
 		count += ret;
 		format++;
 	}
