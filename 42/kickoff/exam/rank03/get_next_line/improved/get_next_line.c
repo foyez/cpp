@@ -31,7 +31,7 @@ char *get_next_line(int fd)
 
 	line = malloc(capacity);
 	if (fd < 0 || BUFFER_SIZE <= 0 || !line)
-		return (NULL);
+		return (free(line), NULL);
 
 	while (1)
 	{
