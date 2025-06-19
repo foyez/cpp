@@ -29,9 +29,12 @@ char *get_next_line(int fd)
 	char *line;
 	int len = 0;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+
 	line = malloc(capacity);
-	if (fd < 0 || BUFFER_SIZE <= 0 || !line)
-		return (free(line), NULL);
+	if (!line)
+		return (NULL);
 
 	while (1)
 	{
