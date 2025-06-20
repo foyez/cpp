@@ -6,7 +6,7 @@ char *get_next_line(int fd)
 	static char buf[BUFFER_SIZE];
 	static int buf_idx = 0;
 	char *line;
-	int line_idx = 0;
+	int len = 0;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
@@ -24,13 +24,13 @@ char *get_next_line(int fd)
 			if (bytes_read <= 0)
 				break;
 		}
-		line[line_idx++] = buf[buf_idx++];
-		if (line[line_idx - 1] == '\n')
+		line[len++] = buf[buf_idx++];
+		if (line[len - 1] == '\n')
 			break;
 	}
-	if (line_idx > 0)
+	if (len > 0)
 	{
-		line[line_idx] = '\0';
+		line[len] = '\0';
 		return (line);
 	}
 	free(line);
