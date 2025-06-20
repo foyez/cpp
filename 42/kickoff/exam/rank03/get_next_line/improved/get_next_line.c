@@ -1,24 +1,24 @@
 #include "get_next_line.h"
 
-char *ft_realloc(char *str, int old_size, int new_size)
-{
-	char *new_str;
-	int i;
+// char *ft_realloc(char *str, int old_size, int new_size)
+// {
+// 	char *new_str;
+// 	int i;
 
-	if (!str)
-		return (malloc(new_size));
-	if (new_size <= 0)
-		return (NULL);
-	new_str = malloc(new_size);
-	if (!new_str)
-		return (NULL);
-	i = -1;
-	while (++i < old_size && str[i])
-		new_str[i] = str[i];
-	new_str[i] = '\0';
-	free(str);
-	return (new_str);
-}
+// 	if (!str)
+// 		return (malloc(new_size));
+// 	if (new_size <= 0)
+// 		return (NULL);
+// 	new_str = malloc(new_size);
+// 	if (!new_str)
+// 		return (NULL);
+// 	i = -1;
+// 	while (++i < old_size)
+// 		new_str[i] = str[i];
+// 	new_str[i] = '\0';
+// 	free(str);
+// 	return (new_str);
+// }
 
 char *get_next_line(int fd)
 {
@@ -42,7 +42,9 @@ char *get_next_line(int fd)
 		{
 			buf_idx = 0;
 			bytes_read = read(fd, buf, BUFFER_SIZE);
-			if (bytes_read <= 0)
+			if (bytes_read < 0)
+				return (free(line), NULL);
+			if (bytes_read == 0)
 				break;
 		}
 		if (len + 1 >= capacity)
@@ -57,25 +59,28 @@ char *get_next_line(int fd)
 		if (line[len - 1] == '\n')
 			break;
 	}
-	if (len == 0)
-		return (free(line), NULL);
-	line[len] = '\0';
-	return (line);
-}
-
-#include <fcntl.h>
-#include <stdio.h>
-
-int	main(void)
-{
-	int fd = open("test.txt", O_RDONLY);
-	char *line;
-
-	while ((line = get_next_line(fd)))
+	if (len > 0)
 	{
-		printf("%s", line);
-		free(line);
+		line[len] = '\0';
+		return (line);
 	}
-	close(fd);
-	return (0);
+	free(line);
+	return (NULL);
 }
+
+// #include <fcntl.h>
+// #include <stdio.h>
+
+// int	main(void)
+// {
+// 	int fd = open("test.txt", O_RDONLY);
+// 	char *line;
+
+// 	while ((line = get_next_line(fd)))
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 	}
+// 	close(fd);
+// 	return (0);
+// }

@@ -8,6 +8,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-char  *get_nex_line(int fd);
+char  *get_next_line(int fd);
+char *ft_realloc(char *str, int old_size, int new_size);
 
 #endif
