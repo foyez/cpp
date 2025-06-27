@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 21:57:53 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/06/18 03:04:03 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/06/27 20:09:46 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,18 @@ static int	ft_error(va_list args)
 	return (-1);
 }
 
+// A va_list is not just a simple pointer —
+// it contains internal state (like current argument position)
+// If we pass it by value or use it twice without copying,
+// it can behave incorrectly on many systems.
 int	ft_vdprintf(int fd, const char *format, va_list args)
 {
 	int		count;
 	int		ret;
 	t_flags	flags;
+	va_list	args_copy;
 
+	va_copy(args_copy, args);
 	count = 0;
 	while (*format)
 	{
@@ -31,7 +37,7 @@ int	ft_vdprintf(int fd, const char *format, va_list args)
 		{
 			format++;
 			format = parse_flags(format, &flags);
-			ret = handle_format(fd, *format, &args, flags);
+			ret = handle_format(fd, *format, args_copy, flags);
 		}
 		else
 			ret = ft_putchar(fd, *format);
@@ -40,6 +46,7 @@ int	ft_vdprintf(int fd, const char *format, va_list args)
 		count += ret;
 		format++;
 	}
+	va_end(args_copy);
 	return (count);
 }
 

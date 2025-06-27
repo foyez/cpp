@@ -6,7 +6,7 @@
 /*   By: kaahmed <kaahmed@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 20:16:00 by kaahmed           #+#    #+#             */
-/*   Updated: 2025/06/18 03:07:53 by kaahmed          ###   ########.fr       */
+/*   Updated: 2025/06/27 20:03:12 by kaahmed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int			ft_printf(const char *str, ...);
 int			ft_fprintf(int fd, const char *format, ...);
 int			ft_vdprintf(int fd, const char *format, va_list args);
 const char	*parse_flags(const char *format, t_flags *flags);
-int			handle_format(int fd, char c, va_list *args, t_flags flags);
+int			handle_format(int fd, char c, va_list args, t_flags flags);
 int			print_char(int fd, char c, t_flags flags);
 int			print_str(int fd, const char *str, t_flags flags);
 int			print_nbr(int fd, int n, t_flags flags);
