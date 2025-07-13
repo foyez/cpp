@@ -13,11 +13,11 @@
 
 ```sh
 cd ~/goinfre
-mkdir -p $USER/Containers
+mkdir -p Containers && cd Containers
 cp -r ~/Library/Containers/com.docker.docker .
 
 # then, open Docker Desktop Settings and navigate to: Resources > ADVANCED
-# now, change Disk image location with: /goinfre/kaahmed/kaahmed/Containers/com.docker.docker/Data/vms/0/data
+# now, change Disk image location with: /goinfre/kaahmed/Containers/com.docker.docker/Data/vms/0/data
 ```
 
 - To reset Home directory
