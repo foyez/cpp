@@ -6,6 +6,7 @@ int apply_dup2(int fd, int target_fd);
 int ft_popen(char *file, char *const argv[], char type) {
 	int pfd[2];
 	pid_t pid;
+	int ret;
 
 	if (!file || !argv || !(type == 'r' || type == 'w'))
 		return -1;
@@ -34,14 +35,15 @@ int ft_popen(char *file, char *const argv[], char type) {
 		exit(1);
 	} 
 
+	ret = -1;
 	if (type == 'r') {
 		close(pfd[1]);
-		return pfd[0];
+		ret = pfd[0];
 	} else {
 		close(pfd[0]);
-		return pfd[1];
+		ret = pfd[1];
 	}
-	return -1;
+	return ret;
 }
 
 int apply_dup2(int fd, int target_fd) {
@@ -54,18 +56,38 @@ int apply_dup2(int fd, int target_fd) {
 	return 0;
 }
 
+#include <stdio.h>
+
 int main()
 {
 	int fd;
+	char buffer[1024];
+	ssize_t bytes;
 
-	fd = ft_popen("wc", (char *const []){"wc", "-l", NULL}, 'w');
+	fd = ft_popen("ls", (char *const []){"ls", NULL}, 'r');
 	if (fd == -1)
 		return 1;
 
-	write(fd, "line 1\n", 7);
-	write(fd, "line 2\n", 7);
-	write(fd, "line 3\n", 7);
-
+	while ((bytes = read(fd, buffer, sizeof(buffer) - 1)) > 0) {
+		buffer[bytes] = '\0';
+		printf("%s", buffer);
+	}
 	close(fd);
 	return 0;
 }
+
+// int main()
+// {
+// 	int fd;
+//
+// 	fd = ft_popen("wc", (char *const []){"wc", "-l", NULL}, 'w');
+// 	if (fd == -1)
+// 		return 1;
+//
+// 	write(fd, "line 1\n", 7);
+// 	write(fd, "line 2\n", 7);
+// 	write(fd, "line 3\n", 7);
+//
+// 	close(fd);
+// 	return 0;
+// }
