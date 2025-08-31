@@ -3,11 +3,7 @@
 #include <ctype.h>
 
 typedef struct node {
-	enum {
-		ADD,
-		MULTI,
-		VAL
-	} type;
+	enum { ADD, MULTI, VAL } type;
 	int val;
 	struct node *l;
 	struct node *r;
@@ -18,17 +14,16 @@ node *parse_multi(char **s);
 
 node *new_node(node n)
 {
-	node *right = calloc(1, sizeof(n));
-	if (!right)
+	node *p = calloc(1, sizeof(n));
+	if (!p)
 		return (NULL);
-	*right = n;
-	return right;
+	*p = n;
+	return p;
 }
 
 void destroy_tree(node *n)
 {
-	if (!n)
-		return ;
+	if (!n) return;
 	if (n->type != VAL)
 	{
 		destroy_tree(n->l);
@@ -47,7 +42,7 @@ void unexpected(char c)
 
 int accept(char **s, char c)
 {
-	if (**s)
+	if (**s == c)
 	{
 		(*s)++;
 		return 1;
@@ -68,21 +63,18 @@ node *parse_digit_or_group(char **s)
 	node *body;
 	node new;
 
-	if (**s && **s == '(')
+	if (accept(s, '(')) // skip '('
 	{
-		(*s)++; // skip '('
 		body = parse_add(s);
-		if (!body || **s != ')')
+		if (!body || !expect(s, ')')) // skip ');
 		{
 			destroy_tree(body);
-			unexpected(**s);
 			return NULL;
 		}
-		(*s)++; // skip ');
 		return body;
 	}
 
-	if (!isdigit(**s))
+	if (!**s || !isdigit((unsigned char)**s))
 	{
 		unexpected(**s);
 		return NULL;
@@ -109,9 +101,8 @@ node *parse_multi(char **s)
 	left = parse_digit_or_group(s);
 	if (!left)
 		return NULL;
-	while (**s && **s == '*')
+	while (accept(s, '*')) // skip '*'
 	{
-		(*s)++; // skip '*'
 		right = parse_digit_or_group(s);
 		if (!right)
 		{
@@ -125,13 +116,14 @@ node *parse_multi(char **s)
 		new.r = right;
 		new.val = 0;
 
-		// left fold tree
-		left = new_node(new);
+		node *parent = new_node(new);
 		if (!left)
 		{
+			destroy_tree(left);
 			destroy_tree(right);
 			return NULL;
 		}
+		left = parent; // left-fold
 	}
 	return left;
 }
@@ -145,9 +137,8 @@ node *parse_add(char **s)
 	left = parse_multi(s);
 	if (!left)
 		return NULL;
-	while (**s && **s == '+')
+	while (accept(s, '+')) // skip '+'
 	{
-		(*s)++; // skip '+'
 		right = parse_multi(s);
 		if (!right)
 		{
@@ -161,13 +152,14 @@ node *parse_add(char **s)
 		new.r = right;
 		new.val = 0;
 
-		// left fold tree
-		left = new_node(new);
+		node *parent = new_node(new);
 		if (!left)
 		{
+			destroy_tree(left);
 			destroy_tree(right);
 			return NULL;
 		}
+		left = parent; // left-fold
 	}
 	return left;
 }
@@ -177,7 +169,7 @@ node *parse_expr(char **s)
 	node *right = parse_add(s);
 	if (!right)
 		return NULL;
-	// check that the entire input is consumed
+	// ensure full consumption
 	if (**s)
 	{
 		destroy_tree(right);
@@ -205,9 +197,13 @@ int main(int argc, char **argv)
 {
 	if (argc != 2)
 		return 1;
+
 	node *tree = parse_expr(&argv[1]);
 	if (!tree)
 		return 1;
+
 	printf("%d\n", eval_tree(tree));
 	destroy_tree(tree);
+
+	return 0;
 }
