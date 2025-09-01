@@ -82,33 +82,11 @@ void free_json(json *j)
 	else if (j->type == MAP) free_pairs(j->map.data, j->map.size);
 }
 
-int ft_strlen(char *str)
-{
-	int len = 0;
-	while (str[len])
-		len++;
-	return len;
-}
-
-char *ft_strdup(char *src)
-{
-	int len = ft_strlen(src);
-	char *s = (char *)malloc(sizeof(char) * (len + 1));
-	if (!s)
-		return NULL;
-	s[len] = '\0';
-	while (len >= 0)
-	{
-		s[len] = src[len];
-		len--;
-	}
-	return s;
-}
-
 int parse_str(char **out, FILE *s)
 {
-	char buf[4096];
+	char *buf = NULL;
 	size_t len = 0;
+	size_t cap = 0;
 	int c;
 
 	if (!expect(s, '"')) return -1;
@@ -117,6 +95,7 @@ int parse_str(char **out, FILE *s)
 		c = getc(s);
 		if (c == EOF)
 		{
+			free(buf);
 			unexpected_end();
 			return -1;
 		}
@@ -126,27 +105,33 @@ int parse_str(char **out, FILE *s)
 			c = getc(s);
 			if (c == EOF)
 			{
+				free(buf);
 				unexpected_end();
 				return -1;
 			}
 			if (c != '\\' && c != '"')
 			{
+				free(buf);
 				unexpected_token((char)c);
 				return -1;
 			}
 		}
-		buf[len++] = (char)c;
-
-		if (len >= sizeof(buf) - 1)
+		if (!grow_cap(&buf, &cap, len + 1))
 		{
-			unexpected(s);
+			free(buf);
 			return -1;
 		}
+		buf[len++] = (char)c;
 	}
 
+	if (!grow_cap(&buf, &cap, len + 1))
+	{
+		free(buf);
+		return -1;
+	}
 	buf[len] = '\0';
 
-	*out = ft_strdup(buf);
+	*out = buf;
 	return 1;
 }
 
