@@ -117,7 +117,7 @@ node *parse_multi(char **s)
 		new.val = 0;
 
 		node *parent = new_node(new);
-		if (!left)
+		if (!parent)
 		{
 			destroy_tree(left);
 			destroy_tree(right);
@@ -153,7 +153,7 @@ node *parse_add(char **s)
 		new.val = 0;
 
 		node *parent = new_node(new);
-		if (!left)
+		if (!parent)
 		{
 			destroy_tree(left);
 			destroy_tree(right);
@@ -166,17 +166,17 @@ node *parse_add(char **s)
 
 node *parse_expr(char **s)
 {
-	node *right = parse_add(s);
-	if (!right)
+	node *root = parse_add(s);
+	if (!root)
 		return NULL;
 	// ensure full consumption
 	if (**s)
 	{
-		destroy_tree(right);
+		destroy_tree(root);
 		unexpected(**s);
 		return NULL;
 	}
-	return right;
+	return root;
 }
 
 int eval_tree(node *tree)

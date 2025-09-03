@@ -1,8 +1,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-int apply_dup2(int fd, int target_fd);
-
 int ft_popen(char *file, char *const argv[], char type) {
 	int pfd[2];
 	pid_t pid;
@@ -23,17 +21,18 @@ int ft_popen(char *file, char *const argv[], char type) {
 
 	if (pid == 0) {
 		if (type == 'r') {
-			if (apply_dup2(pfd[1], STDOUT_FILENO) == -1)
+			if (dup2(pfd[1], STDOUT_FILENO) == -1)
 				exit(1);
 		} else {
-			if (apply_dup2(pfd[0], STDIN_FILENO) == -1)
+			if (dup2(pfd[0], STDIN_FILENO) == -1)
 				exit(1);
 		}
+		close(pfd[0]);
 		close(pfd[1]);
 
 		execvp(file, argv);
 		exit(1);
-	} 
+	}
 
 	ret = -1;
 	if (type == 'r') {
@@ -44,16 +43,6 @@ int ft_popen(char *file, char *const argv[], char type) {
 		ret = pfd[1];
 	}
 	return ret;
-}
-
-int apply_dup2(int fd, int target_fd) {
-	if (fd == target_fd)
-		return 0;
-	if (dup2(fd, target_fd) == -1)
-		return -1;
-	if (close(fd) == -1)
-		return -1;
-	return 0;
 }
 
 #include <stdio.h>

@@ -50,19 +50,6 @@ int expect(FILE *stream, char c)
 	return 0;
 }
 
-int grow_cap(char **buf, size_t *cap, size_t need)
-{
-	if (need <= *cap) return 1;
-	size_t ncap = (*cap ? *cap : 16);
-	while (ncap < need)
-		ncap *= 2;
-	char *nbuf = (char *)realloc(*buf, ncap);
-	if (!nbuf) return 0;
-	*buf = nbuf;
-	*cap = ncap;
-	return 1;
-}
-
 void free_pairs(pair *items, size_t n)
 {
 	if (!items) return ;
