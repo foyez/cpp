@@ -46,16 +46,16 @@ int main(int argc, char **argv)
 		{
 				int len = 0;
 				while (i + len < argc && strcmp(argv[i + len], "|") != 0)
-						len++;
-				
+					len++;
+
 				cmds[j] = calloc(len + 1, sizeof(char *));
 				if (!cmds[j])
-						return (perror("calloc"), 1);
-				
+					return (perror("calloc"), 1);
+
 				for (int k = 0; k < len; k++)
-						cmds[j][k] = argv[i + k];
+					cmds[j][k] = argv[i + k];
 				cmds[j][len] = NULL;
-				
+
 				i += len + 1;  // Saltar el "|"
 				j++;
 		}
@@ -67,8 +67,6 @@ int main(int argc, char **argv)
 		for (int i = 0; cmds[i]; i++)
 				free(cmds[i]);
 		free(cmds);
-		
-		printf("count: %d\n", cmd_count);
 
 		return ret;
 }
