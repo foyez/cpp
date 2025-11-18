@@ -187,7 +187,7 @@ public:
     ~Dog() {
         cout << "Dog destructor\n";
     }
-    
+
     void bark() {
         cout << age << " years old dog is " << "barking...\n";
     }
