@@ -171,6 +171,18 @@ void demonstrate_polymorphic_container() {
   render(*shapes[0]);
 }
 
+// Without polymorphism (ugly):
+// void drawCircle(Circle c) {}
+// void drawSquare(Square s) {}
+// void drawTriangle(Triangle t) {}
+// With polymorphism (clean):
+void draw(Shape* s) {
+    s->draw();
+}
+// draw(new Circle());
+// draw(new Square());
+// draw(new Triangle());
+
 // Function Overloading = same function name, different parameter lists.
 // Compiler decides which one to use at compile time (static polymorphism).
 // Overloading Rules
