@@ -80,6 +80,27 @@ vect2 vect2::operator-() const
   return vect2(-x, -y);
 }
 
+// binary arithmetic operators
+vect2 operator+(const vect2 &a, const vect2 &b)
+{
+  return vect2(a[0] + b[0], a[1] + b[1]);
+}
+
+vect2 operator-(const vect2 &a, const vect2 &b)
+{
+  return vect2(a[0] - b[0], a[1] - b[1]);
+}
+
+vect2 operator*(const vect2 &v, int scalar)
+{
+  return vect2(v[0] * scalar, v[1] * scalar);
+}
+
+vect2 operator*(int scalar, const vect2 &v)
+{
+  return vect2(v[0] * scalar, v[1] * scalar);
+}
+
 // array subscript operator (non-const)
 int &vect2::operator[](int index)
 {

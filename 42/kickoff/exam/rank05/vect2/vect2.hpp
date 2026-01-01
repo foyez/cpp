@@ -37,6 +37,12 @@ public:
   const int &operator[](int index) const;
 };
 
+// binary arithmetic operators
+vect2 operator+(const vect2 &a, const vect2 &b);
+vect2 operator-(const vect2 &a, const vect2 &b);
+vect2 operator*(const vect2 &v, int scalar);
+vect2 operator*(int scalar, const vect2 &v);
+
 // Stream Intersection Operator
 std::ostream &operator<<(std::ostream &os, const vect2 &v);
 
