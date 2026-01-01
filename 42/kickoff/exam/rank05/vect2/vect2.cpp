@@ -34,6 +34,38 @@ const int &vect2::operator[](int index) const
   return y;
 }
 
+// prefix increment (++v)
+vect2 &vect2::operator++()
+{
+  ++x;
+  ++y;
+  return *this;
+}
+
+// postfix increment (v++)
+vect2 vect2::operator++(int)
+{
+  vect2 tmp(*this); // save current state
+  ++(*this);        // use prefix increment
+  return tmp;       // return old state
+}
+
+// prefix decrement (--v)
+vect2 &vect2::operator--()
+{
+  --x;
+  --y;
+  return *this;
+}
+
+// postfix decrement (v--)
+vect2 vect2::operator--(int)
+{
+  vect2 tmp(*this); // save current state
+  --(*this);        // use prefix decrement
+  return tmp;       // return old state
+}
+
 std::ostream &operator<<(std::ostream &os, const vect2 &v)
 {
   os << "{" << v[0] << ", " << v[1] << "}";

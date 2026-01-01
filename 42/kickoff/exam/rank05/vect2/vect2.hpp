@@ -21,6 +21,12 @@ public:
   // array subscript operator
   int &operator[](int index); // non-const version
   const int &operator[](int index) const;
+
+  // increment/decrement operators
+  vect2 &operator++();   // prefix increment
+  vect2 operator++(int); // postfix increment
+  vect2 &operator--();   // prefix decrement
+  vect2 operator--(int); // postfix decrement
 };
 
 // Stream Intersection Operator
