@@ -32,6 +32,10 @@ public:
   // unary minus operator
   vect2 operator-() const;
 
+  // comparison operators
+  bool operator==(const vect2 &other) const;
+  bool operator!=(const vect2 &other) const;
+
   // array subscript operator
   int &operator[](int index); // non-const version
   const int &operator[](int index) const;

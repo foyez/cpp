@@ -101,6 +101,17 @@ vect2 operator*(int scalar, const vect2 &v)
   return vect2(v[0] * scalar, v[1] * scalar);
 }
 
+// comparison operators
+bool vect2::operator==(const vect2 &other) const
+{
+  return (x == other.x) && (y == other.y);
+}
+
+bool vect2::operator!=(const vect2 &other) const
+{
+  return !(*this == other); // use == operator
+}
+
 // array subscript operator (non-const)
 int &vect2::operator[](int index)
 {
