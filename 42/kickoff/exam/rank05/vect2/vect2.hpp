@@ -32,6 +32,9 @@ public:
   // unary minus operator
   vect2 operator-() const;
 
+  // binary arithmetic operator (member functions)
+  // vect2 operator+(const vect2 &other) const;
+
   // comparison operators
   bool operator==(const vect2 &other) const;
   bool operator!=(const vect2 &other) const;

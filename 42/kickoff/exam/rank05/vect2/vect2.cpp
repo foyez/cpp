@@ -86,6 +86,12 @@ vect2 operator+(const vect2 &a, const vect2 &b)
   return vect2(a[0] + b[0], a[1] + b[1]);
 }
 
+// binary arithmetic addition (member function)
+// vect2 vect2::operator+(const vect2 &other) const
+// {
+//   return vect2(x + other.x, y + other.y);
+// }
+
 vect2 operator-(const vect2 &a, const vect2 &b)
 {
   return vect2(a[0] - b[0], a[1] - b[1]);
