@@ -74,6 +74,12 @@ vect2 vect2::operator--(int)
   return tmp;       // return old state
 }
 
+// unary minus operator
+vect2 vect2::operator-() const
+{
+  return vect2(-x, -y);
+}
+
 // array subscript operator (non-const)
 int &vect2::operator[](int index)
 {

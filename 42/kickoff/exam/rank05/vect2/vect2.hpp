@@ -29,6 +29,9 @@ public:
   vect2 &operator--();   // prefix decrement
   vect2 operator--(int); // postfix decrement
 
+  // unary minus operator
+  vect2 operator-() const;
+
   // array subscript operator
   int &operator[](int index); // non-const version
   const int &operator[](int index) const;

@@ -21,5 +21,5 @@ int main()
   v2 += v3; // 2, 4
   v1 -= v2; // -2, -4
   v1 *= 42; // -84, -168
-  std::cout << "v1: " << v1 << std::endl;
+  std::cout << "v1: " << -v1 << std::endl;
 }
