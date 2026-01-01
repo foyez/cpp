@@ -20,18 +20,26 @@ vect2 &vect2::operator=(const vect2 &other)
   return *this;
 }
 
-int &vect2::operator[](int index)
+// compound assignment operators
+vect2 &vect2::operator+=(const vect2 &other)
 {
-  if (index == 0)
-    return x;
-  return y;
+  x += other.x;
+  y += other.y;
+  return *this;
 }
 
-const int &vect2::operator[](int index) const
+vect2 &vect2::operator-=(const vect2 &other)
 {
-  if (index == 0)
-    return x;
-  return y;
+  x -= other.x;
+  y -= other.y;
+  return *this;
+}
+
+vect2 &vect2::operator*=(int scalar)
+{
+  x *= scalar;
+  y *= scalar;
+  return *this;
 }
 
 // prefix increment (++v)
@@ -64,6 +72,22 @@ vect2 vect2::operator--(int)
   vect2 tmp(*this); // save current state
   --(*this);        // use prefix decrement
   return tmp;       // return old state
+}
+
+// array subscript operator (non-const)
+int &vect2::operator[](int index)
+{
+  if (index == 0)
+    return x;
+  return y;
+}
+
+// array subscript operator (const)
+const int &vect2::operator[](int index) const
+{
+  if (index == 0)
+    return x;
+  return y;
 }
 
 std::ostream &operator<<(std::ostream &os, const vect2 &v)
