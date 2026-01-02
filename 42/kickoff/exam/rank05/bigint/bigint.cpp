@@ -89,9 +89,19 @@ bigint bigint::operator+(const bigint &other) const
 }
 
 // prefix increment (++a)
-// bigint &bigint::operator++()
-// {
-// }
+bigint &bigint::operator++()
+{
+  *this += bigint(1); // use parameterized constructor and addition assignment operator
+  return *this;
+}
+
+// postfix increment (a++)
+bigint bigint::operator++(int)
+{
+  bigint tmp(*this); // save current state
+  ++(*this);         // use prefix increment
+  return tmp;        // return old state
+}
 
 const std::string &bigint::getDigits() const
 {

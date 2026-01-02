@@ -24,8 +24,8 @@ public:
   bigint operator+(const bigint &other) const;
 
   // increment operators
-  // bigint &operator++();    // prefix increment
-  // bigint &operator++(int); // postfix increment
+  bigint &operator++();   // prefix increment
+  bigint operator++(int); // postfix increment
 
   // getter for accessing digits
   const std::string &getDigits() const;
