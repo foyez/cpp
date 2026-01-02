@@ -14,8 +14,21 @@ public:
   bigint(unsigned long long n); // unsigned long long parameterized constructor
   bigint(const bigint &other);  // copy constructor
 
+  // assignment operator
+  // bigint &operator=(const bigint &other);
+
+  // arithmetic operators
+  bigint &operator+=(const bigint &other);
+
+  // increment operators
+  // bigint &operator++();    // prefix increment
+  // bigint &operator++(int); // postfix increment
+
   // getter for accessing digits
   const std::string &getDigits() const;
+
+  // remove leading zeros from the string
+  void removeLeadingZeros();
 };
 
 // Stream Intersection Operator
