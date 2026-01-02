@@ -17,8 +17,11 @@ public:
   // assignment operator
   // bigint &operator=(const bigint &other);
 
-  // arithmetic operators
+  // addition assignment operator
   bigint &operator+=(const bigint &other);
+
+  // addition operator
+  bigint operator+(const bigint &other) const;
 
   // increment operators
   // bigint &operator++();    // prefix increment

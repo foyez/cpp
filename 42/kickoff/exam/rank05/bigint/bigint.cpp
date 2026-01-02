@@ -80,6 +80,14 @@ bigint &bigint::operator+=(const bigint &other)
   return *this;
 }
 
+// addition operator
+bigint bigint::operator+(const bigint &other) const
+{
+  bigint result(*this); // use copy constructor
+  result += other;      // use addition assignment operator
+  return result;
+}
+
 // prefix increment (++a)
 // bigint &bigint::operator++()
 // {
