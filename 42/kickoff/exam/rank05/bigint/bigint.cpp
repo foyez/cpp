@@ -103,6 +103,44 @@ bigint bigint::operator++(int)
   return tmp;        // return old state
 }
 
+// comparison operators
+bool bigint::operator==(const bigint &other) const
+{
+  return digits == other.digits;
+}
+
+bool bigint::operator!=(const bigint &other) const
+{
+  return !(*this == other); // use equality operator
+}
+
+bool bigint::operator<(const bigint &other) const
+{
+  // different length - shorter is smaller
+  if (digits.size() != other.digits.size())
+  {
+    return digits.size() < other.digits.size();
+  }
+
+  // same length - lexicographic comparison works for digits
+  return digits < other.digits;
+}
+
+bool bigint::operator<=(const bigint &other) const
+{
+  return (*this < other) || (*this == other);
+}
+
+bool bigint::operator>(const bigint &other) const
+{
+  return !(*this <= other);
+}
+
+bool bigint::operator>=(const bigint &other) const
+{
+  return !(*this < other);
+}
+
 const std::string &bigint::getDigits() const
 {
   return digits;

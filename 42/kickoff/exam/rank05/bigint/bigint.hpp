@@ -27,6 +27,14 @@ public:
   bigint &operator++();   // prefix increment
   bigint operator++(int); // postfix increment
 
+  // comparison operators
+  bool operator<(const bigint &other) const;
+  bool operator<=(const bigint &other) const;
+  bool operator>(const bigint &other) const;
+  bool operator>=(const bigint &other) const;
+  bool operator==(const bigint &other) const;
+  bool operator!=(const bigint &other) const;
+
   // getter for accessing digits
   const std::string &getDigits() const;
 
