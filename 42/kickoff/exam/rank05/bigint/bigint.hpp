@@ -12,7 +12,8 @@ public:
   // constructors
   bigint();                     // default constructor
   bigint(unsigned long long n); // unsigned long long parameterized constructor
-  bigint(const bigint &other);  // copy constructor
+  // bigint(const std::string &str); // string parameterized constructor
+  bigint(const bigint &other); // copy constructor
 
   // assignment operator
   // bigint &operator=(const bigint &other);
@@ -28,12 +29,23 @@ public:
   bigint operator++(int); // postfix increment
 
   // comparison operators
+  bool operator==(const bigint &other) const;
+  bool operator!=(const bigint &other) const;
   bool operator<(const bigint &other) const;
   bool operator<=(const bigint &other) const;
   bool operator>(const bigint &other) const;
   bool operator>=(const bigint &other) const;
-  bool operator==(const bigint &other) const;
-  bool operator!=(const bigint &other) const;
+
+  // digit shift operators
+  bigint &operator<<=(unsigned long long shift);
+  bigint &operator<<=(const bigint &shift);
+  bigint operator<<(unsigned long long shift) const;
+  bigint operator<<(const bigint &shift) const;
+
+  bigint &operator>>=(unsigned long long shift);
+  bigint &operator>>=(const bigint &shift);
+  bigint operator>>(unsigned long long shift) const;
+  bigint operator>>(const bigint &shift) const;
 
   // getter for accessing digits
   const std::string &getDigits() const;

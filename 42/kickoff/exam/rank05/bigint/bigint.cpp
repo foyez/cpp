@@ -32,6 +32,20 @@ bigint::bigint(unsigned long long n)
   }
 }
 
+// // Constructor from string
+// bigint::bigint(const std::string &str)
+// {
+//   if (str.empty())
+//   {
+//     digits = "0";
+//   }
+//   else
+//   {
+//     digits = str;
+//     removeLeadingZeros();
+//   }
+// }
+
 // copy constructor
 bigint::bigint(const bigint &other) : digits(other.digits) {}
 
@@ -139,6 +153,92 @@ bool bigint::operator>(const bigint &other) const
 bool bigint::operator>=(const bigint &other) const
 {
   return !(*this < other);
+}
+
+// left shift assignment (digit shift left - multiply by 10^shift)
+bigint &bigint::operator<<=(unsigned long long shift)
+{
+  if (shift == 0)
+    return *this;
+
+  if (digits == "0")
+    return *this;
+
+  // append zeros to the right
+  for (unsigned long long i = 0; i < shift; i++)
+    digits += '0';
+
+  return *this;
+}
+
+bigint &bigint::operator<<=(const bigint &shift)
+{
+  unsigned long long shiftAmount = 0;
+
+  for (size_t i = 0; i < shift.digits.size(); i++)
+    shiftAmount = shiftAmount * 10 + (shift.digits[i] - '0');
+
+  return *this <<= shiftAmount;
+}
+
+bigint bigint::operator<<(unsigned long long shift) const
+{
+  bigint result(*this);
+  result <<= shift;
+  return result;
+}
+
+bigint bigint::operator<<(const bigint &shift) const
+{
+  bigint result(*this);
+  result <<= shift;
+  return result;
+}
+
+// right shift assignment (digit shift right - divide by 10^shift)
+bigint &bigint::operator>>=(unsigned long long shift)
+{
+  if (shift == 0)
+    return *this;
+
+  if (shift >= digits.size())
+  {
+    digits = "0";
+    return *this;
+  }
+
+  // remove 'shift' digits from the right
+  digits = digits.substr(0, digits.size() - shift);
+
+  if (digits.empty())
+    digits = "0";
+
+  removeLeadingZeros();
+  return *this;
+}
+
+bigint &bigint::operator>>=(const bigint &shift)
+{
+  unsigned long long shiftAmount = 0;
+
+  for (size_t i = 0; i < shift.digits.size(); i++)
+    shiftAmount = shiftAmount * 10 + (shift.digits[i] - '0');
+
+  return *this >>= shiftAmount;
+}
+
+bigint bigint::operator>>(unsigned long long shift) const
+{
+  bigint result(*this);
+  result >>= shift;
+  return result;
+}
+
+bigint bigint::operator>>(const bigint &shift) const
+{
+  bigint result(*this);
+  result >>= shift;
+  return result;
 }
 
 const std::string &bigint::getDigits() const
