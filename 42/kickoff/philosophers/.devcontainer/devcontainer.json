@@ -1,0 +1,23 @@
+{
+  "name": "C Dev with Makefile",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "C_Cpp.default.configurationProvider": "ms-vscode.cpptools"
+      },
+      "extensions": [
+        "ms-vscode.cpptools-extension-pack", // C/C++ Extension Pack
+        "dokca.42-ft-count-line", // 42 ft count line
+        "kube.42header", // 42 Header
+        "keyhr.42-c-format" // 42 C-Format
+      ]
+    }
+  },
+  "remoteUser": "root",
+  "workspaceFolder": "/workspaces/philosophers",
+  "postCreateCommand": "zsh -c 'source ~/.zshrc'"
+}

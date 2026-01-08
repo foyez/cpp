@@ -1,0 +1,49 @@
+{
+    "configurations": [
+        {
+            "name": "Philo",
+            "includePath": [
+                "${workspaceFolder}/philo/include",
+                "/usr/include",
+                "/usr/local/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-arm64",
+            "configurationProvider": "ms-vscode.cpptools",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/philo/src",
+                    "${workspaceFolder}/philo/include",
+                    "/usr/include",
+                    "/usr/local/include"
+                ]
+            }
+        },
+        {
+            "name": "Philo Bonus",
+            "includePath": [
+                "${workspaceFolder}/philo_bonus/include",
+                "/usr/include",
+                "/usr/local/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-arm64",
+            "configurationProvider": "ms-vscode.cpptools",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/philo_bonus/src",
+                    "${workspaceFolder}/philo_bonus/include",
+                    "/usr/include",
+                    "/usr/local/include"
+                ]
+            }
+        }
+    ],
+    "version": 4
+}
