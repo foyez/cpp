@@ -47,13 +47,8 @@ int main(int argc, char **argv)
 		sa.get_bag().print();
 		st.print();
 		sa.clear();
-		sa.insert((int[]){
-									1,
-									2,
-									3,
-									4,
-							},
-							4);
+		int temp[] = {1, 2, 3, 4};
+		sa.insert(temp, 4);
 		std::cout << std::endl;
 	}
 

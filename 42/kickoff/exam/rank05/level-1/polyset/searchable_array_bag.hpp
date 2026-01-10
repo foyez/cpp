@@ -9,6 +9,7 @@ public:
   searchable_array_bag();
   searchable_array_bag(const searchable_array_bag &source);
   searchable_array_bag &operator=(const searchable_array_bag &source);
-  bool has(int) const;
   ~searchable_array_bag();
+
+  bool has(int) const;
 };

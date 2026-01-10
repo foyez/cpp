@@ -1,3 +1,5 @@
+#pragma once
+
 #include "searchable_bag.hpp"
 
 class set
@@ -10,6 +12,7 @@ public:
   set(const set &source) = delete;
   set &operator=(const set &source) = delete;
   set(searchable_bag &s_bag);
+  ~set();
 
   bool has(int) const;
   void insert(int);
@@ -17,7 +20,5 @@ public:
   void print() const;
   void clear();
 
-  const searchable_bag &get_bag();
-
-  ~set();
+  const searchable_bag &get_bag() const;
 };
