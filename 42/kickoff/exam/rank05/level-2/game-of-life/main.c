@@ -15,9 +15,9 @@ typedef struct
   int height;
 } Board;
 
-void putchar(char c)
+int putchar(int c)
 {
-  write(1, &c, 1);
+  return write(1, &c, 1);
 }
 
 Board *create_board(int width, int height)
@@ -189,3 +189,6 @@ int main(int argc, char **argv)
 
   return 0;
 }
+
+// echo 'sdxddssaaww' | ./a.out 5 5 0 | cat -e
+// echo 'sdxssdswdxdddxsaddawxwdxwaa' | ./a.out 10 6 0 | cat -e
