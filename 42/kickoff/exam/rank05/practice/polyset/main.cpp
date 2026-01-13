@@ -54,5 +54,3 @@ int main(int argc, char **argv)
 
 	return (0);
 }
-
-// ./a.out 5 3 8 1 9
