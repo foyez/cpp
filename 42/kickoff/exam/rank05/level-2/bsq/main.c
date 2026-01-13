@@ -178,6 +178,7 @@ t_square find_biggest_square(t_map *m)
         }
         else
         {
+          // left, top, top-left diagonal
           dp[i][j] = min3(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
         }
 
