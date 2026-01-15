@@ -19,22 +19,16 @@ vect2 &vect2::operator=(const vect2 &other)
 // addition assignment operator
 vect2 &vect2::operator+=(const vect2 &other)
 {
-  if (this != &other)
-  {
-    x += other.x;
-    y += other.y;
-  }
+  x += other.x;
+  y += other.y;
   return *this;
 }
 
 // subtraction assignment operator
 vect2 &vect2::operator-=(const vect2 &other)
 {
-  if (this != &other)
-  {
-    x -= other.x;
-    y -= other.y;
-  }
+  x -= other.x;
+  y -= other.y;
   return *this;
 }
 
