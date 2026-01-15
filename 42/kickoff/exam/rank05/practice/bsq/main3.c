@@ -18,7 +18,7 @@ typedef struct s_square
   int size;
 } t_square;
 
-void ft_printerror()
+void ft_error()
 {
   fprintf(stderr, "map error\n");
 }
@@ -27,12 +27,10 @@ void free_map(t_map *m)
 {
   if (!m)
     return;
-  if (m->grid)
-  {
-    for (int i = 0; i < m->rows; i++)
-      free(m->grid[i]);
-    free(m->grid);
-  }
+
+  for (int i = 0; i < m->rows; i++)
+    free(m->grid[i]);
+  free(m->grid);
   free(m);
 }
 
@@ -40,12 +38,10 @@ void free_map_partial(t_map *m, int rows_alloc)
 {
   if (!m)
     return;
-  if (m->grid)
-  {
-    for (int i = 0; i < rows_alloc; i++)
-      free(m->grid[i]);
-    free(m->grid);
-  }
+
+  for (int i = 0; i < rows_alloc; i++)
+    free(m->grid[i]);
+  free(m->grid);
   free(m);
 }
 
@@ -54,7 +50,7 @@ int is_valid_char(char c, char empty, char obs)
   return (c == empty || c == obs);
 }
 
-t_map *read_map(FILE *f)
+t_map *read_file(FILE *f)
 {
   t_map *m = malloc(sizeof(t_map));
   if (!m)
@@ -137,7 +133,6 @@ t_map *read_map(FILE *f)
       m->grid[row][i] = line[i];
     }
     m->grid[row][linelen] = '\0';
-    // row++;
   }
   free(line);
 
@@ -165,7 +160,7 @@ int min3(int a, int b, int c)
 
 t_square find_biggest_square(t_map *m)
 {
-  // t_square sq = {1, 3, 2};
+  // t_square best = {0, 2, 2};
   t_square best = {0, 0, 0};
 
   if (!m || !m->grid)
@@ -173,8 +168,6 @@ t_square find_biggest_square(t_map *m)
 
   // allocate dp table
   int **dp = malloc(sizeof(int *) * m->rows);
-  if (!dp)
-    return best;
   for (int i = 0; i < m->rows; i++)
     dp[i] = calloc(m->cols, sizeof(int));
 
@@ -195,7 +188,7 @@ t_square find_biggest_square(t_map *m)
           dp[i][j] = min3(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
         }
 
-        // update best square (prefer top-left, dp stores bottom-right)
+        // update best square (prefer top-left, dp stores bottom-left)
         if (dp[i][j] > best.size)
         {
           best.size = dp[i][j];
@@ -243,15 +236,13 @@ void fill_and_print(t_map *m, t_square sq)
 
 void process_file(FILE *f)
 {
-  t_map *m = read_map(f);
-
+  t_map *m = read_file(f);
   if (!m)
   {
-    ft_printerror();
+    ft_error();
     return;
   }
 
-  // t_square sq = {2, 4, 2};
   t_square sq = find_biggest_square(m);
   fill_and_print(m, sq);
   free_map(m);
@@ -270,9 +261,10 @@ int main(int argc, char **argv)
     FILE *f = fopen(argv[i], "r");
     if (!f)
     {
-      ft_printerror();
+      ft_error();
       return 1;
     }
+
     process_file(f);
     fclose(f);
 

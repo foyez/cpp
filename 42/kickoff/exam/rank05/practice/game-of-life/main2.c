@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef struct s_pen
 {
@@ -14,11 +15,6 @@ typedef struct s_board
   int height;
   int width;
 } t_board;
-
-void ft_putchar(int c)
-{
-  write(1, &c, 1);
-}
 
 t_board *create_board(int width, int height)
 {
@@ -68,7 +64,7 @@ void process_cmd(t_board *board, t_pen *pen, char cmd)
     pen->pen_down = !pen->pen_down;
 
     if (pen->pen_down)
-      board->grid[pen->y][pen->x] = '0';
+      board->grid[pen->y][pen->x] = 'O';
     return;
   }
   else
@@ -82,7 +78,7 @@ void process_cmd(t_board *board, t_pen *pen, char cmd)
 
     // draw if pen is down
     if (pen->pen_down)
-      board->grid[pen->y][pen->x] = '0';
+      board->grid[pen->y][pen->x] = 'O';
   }
 }
 
@@ -104,11 +100,12 @@ int count_neighbors(t_board *board, int x, int y)
       // check bounds
       if (nx >= 0 && nx < board->width && ny >= 0 && ny < board->height)
       {
-        if (board->grid[ny][nx] == '0')
+        if (board->grid[ny][nx] == 'O')
           count++;
       }
     }
   }
+
   return count;
 }
 
@@ -121,16 +118,16 @@ void simulate_generation(t_board *board)
     for (int x = 0; x < board->width; x++)
     {
       int neighbors = count_neighbors(board, x, y);
-      int is_alive = (board->grid[y][x] == '0');
+      int is_alive = (board->grid[y][x] == 'O');
 
       // Game of Life rules:
       // 1. any live cell with 2 or 3 neighbors survive
       // 2. any dead cell with exactly 3 neighbors becomes alive
       // 3. all other cells die or stay dead
       if (is_alive && (neighbors == 2 || neighbors == 3))
-        new_board->grid[y][x] = '0';
+        new_board->grid[y][x] = 'O';
       else if (!is_alive && neighbors == 3)
-        new_board->grid[y][x] = '0';
+        new_board->grid[y][x] = 'O';
       else
         new_board->grid[y][x] = ' ';
     }
@@ -154,12 +151,12 @@ void print_board(t_board *board)
   {
     for (int x = 0; x < board->width; x++)
     {
-      if (board->grid[y][x] == '0')
-        ft_putchar('0');
+      if (board->grid[y][x] == 'O')
+        putchar('O');
       else
-        ft_putchar(' ');
+        putchar(' ');
     }
-    ft_putchar('\n');
+    putchar('\n');
   }
 }
 
