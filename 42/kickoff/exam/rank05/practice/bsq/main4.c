@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef struct s_map
 {
@@ -134,6 +134,7 @@ t_map *read_file(FILE *f)
     }
     m->grid[row][linelen] = '\0';
   }
+
   free(line);
 
   // validate row count
@@ -160,7 +161,6 @@ int min3(int a, int b, int c)
 
 t_square find_biggest_square(t_map *m)
 {
-  // t_square best = {0, 2, 2};
   t_square best = {0, 0, 0};
 
   if (!m || !m->grid)
