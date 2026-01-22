@@ -59,7 +59,7 @@ t_map *read_file(FILE *f)
   m->grid = NULL;
 
   // read header
-  if (fscanf(f, "%d %c %c %c\n", &m->rows, &m->empty, &m->obstacle, &m->full) != 4)
+  if (fscanf(f, "%d%c%c%c\n", &m->rows, &m->empty, &m->obstacle, &m->full) != 4)
   {
     free(m);
     return NULL;
